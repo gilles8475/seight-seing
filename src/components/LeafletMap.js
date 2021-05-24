@@ -108,7 +108,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
                 //ajoute un poin au chemin
                 myPolyline.push(myPoint)
-                myPoint.addTo(map)
+                //myPoint.addTo(map)
                 let myPath = myPolyline.map((value) => value.getLatLng())
                 //console.log(myPath);
                 myTrajet.setLatLngs(myPath)
