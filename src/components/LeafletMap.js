@@ -1,6 +1,7 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import mapboxgl from 'mapbox-gl';
+import Ballade from './Ballade';
 
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
 const IGNTOKEN = 'choisirgeoportail'
@@ -68,59 +69,29 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
             accessToken: mapboxAccessToken
         }).addTo(map);
         //ajoute un trajet à la carte
-        const myTrajet = L.polyline(myPolyline, {
-            color: 'red',
+        // const myTrajet = L.polyline(myPolyline, {
+        //     color: 'red',
+        // })
 
-
-        })
-            .addTo(map)
-
-        // myTrajet.on('mouseover',(e)=>{
-        //     myTrajet.bindPopup('<h1>Test popup</h1>').openPopup()
-
-
-        //})
-        var marker = L.marker([44, 5]).addTo(map);
+        const myTrajet = new Ballade(map)
 
 
         const handleClick = (e) => {
 
             let isCTRLKeyPressed = e.originalEvent.ctrlKey
+
             let isRightButtonPressed = e.originalEvent.button == 2 ? true : false
             let lat = e.latlng.lat
             let long = e.latlng.lng
             //console.log(e.originalEvent.button);
 
             if (isCTRLKeyPressed) {
-
+                myTrajet.display()
                 console.log('ctrlkey was pressed')
+                myTrajet.addpoint(e.latlng)
 
-                //let myPoint=L.circle(e.latlng)
-                let myPoint = L.marker(e.latlng, {
-                    icon: myDivIcon,
-                    draggable: true,
-                })
-                    .addTo(map)
-                myPoint.on('drag', () => {
-                    let myPath = myPolyline.map((value) => value.getLatLng())
-                    myTrajet.setLatLngs(myPath)
-                })
 
-                //ajoute un poin au chemin
-                myPolyline.push(myPoint)
-                //myPoint.addTo(map)
-                let myPath = myPolyline.map((value) => value.getLatLng())
-                //console.log(myPath);
-                myTrajet.setLatLngs(myPath)
-
-                //console.log(myPolyline);
-            } else if (isRightButtonPressed) {
-                console.log('rightButton pressed');
-                const myTrajet = L.polygon(myPolyline, {
-                    color: 'blue',
-                    weight: 1,
-                })
-                    .addTo(map)
+               
 
 
             } else {
@@ -136,56 +107,13 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         }
 
         map.on('mousedown', handleClick)
-        //map.on('mousedown', (e) => console.log(e.originalEvent.ctrlKey))
+
 
 
         map.on('dblclick', (e) => {
             //recherche le point le plus proche sur le trajet et l'affiche sous forme de marker
-
-            const a = myTrajet.closestLayerPoint(e.layerPoint)
-            console.clear()
-            console.log(e.latlng)
-            console.log(a);
-            let pos = map.layerPointToLatLng(a)// donne les coordonnées geo du point
-
-            let newMark = L.marker((pos), { icon: myDivIcon, draggable: true }).addTo(map) //crée un marker sur le trajet
-            //now we have to integrate this marker in the myPolyline array. myPoliline is an array of marker
-
-            let refDist = map.distance(pos, myPolyline[0].getLatLng())
-            let indexToInsert = 0
-            myPolyline.forEach((value, index) => {
-                //for each point on the path we check the distance between the point to insert and the point on the path
-                let itemDist = map.distance(pos, value.getLatLng())
-                if (itemDist < refDist) {
-                    indexToInsert = index
-                    refDist = itemDist
-                }
-            })
-
-            //now we are not sure that the closest point on the path is after or before the point to insert
-            //we have to test if the point is before or after the point found on the path
-            //to do that we calculate the distance between the point to insert and the points with indexToInsert and indexToInsert +1
-
-            if (indexToInsert != 0) {
-                let epsilon = 0.001 //marge d'incertitude pour les comparaisons
-                let returnedPoint = myPolyline[indexToInsert].getLatLng()
-                let beforeReturnedPoint = myPolyline[indexToInsert - 1].getLatLng()
-                let test = (map.distance(pos, returnedPoint) + map.distance(pos, beforeReturnedPoint) - epsilon > map.distance(beforeReturnedPoint, returnedPoint))
-
-                // console.log(
-                //     test
-                // );
-
-
-                let beforeOrAfter = test ? 0 : 1
-                indexToInsert -= beforeOrAfter
-
-
-            }
-            myPolyline.splice(indexToInsert + 1, 0, newMark)
-            let myPath = myPolyline.map((value) => value.getLatLng())
-            myTrajet.setLatLngs(myPath)
-            console.log(myPolyline.length);
+            myTrajet.insertpoint(e.layerPoint)
+            
 
 
         })
