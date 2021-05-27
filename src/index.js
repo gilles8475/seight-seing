@@ -2,6 +2,7 @@
 //import Mapboxmap from './components/mapbox';
 import testCreateMap from './components/testCreateMap'
 import LeafletMap from './components/LeafletMap'
+import PathProfil from './components/PathProfil'
 
 function component() {
     
@@ -10,6 +11,9 @@ function component() {
     // testCreateMap('test2', 'dark')
     // testCreateMap('test3', 'sat')
     const map= LeafletMap('leaflet')
+    //elem.appendChild(map)
+    const myProfile = PathProfil('myChart')
+    //elem.appendChild(myProfile)
     // fetch('https://jsonplaceholder.typicode.com/posts/1')
     // .then(res=>res.json())
     // .then(data=>console.log(data))
@@ -28,4 +32,4 @@ function component() {
 
 }
 
-document.body.appendChild(component())
+component()

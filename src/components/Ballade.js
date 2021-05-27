@@ -92,6 +92,29 @@ class Ballade extends Array {
 
 
     }
+
+    getElevations(){
+        //formatage de la requete vers l'api ign de calcul altimétrique. voirhttps://geoservices.ign.fr/documentation/geoservices/alti.html
+        //exemple de requete alti https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=0.2367|2.1570&lat=48.0551|46.6077&indent=true
+        
+        let lon=[]
+        let lat=[]
+        
+        for (let point of this._path){
+            //on fait un tableau de lat et un tableau de long
+            lat.push(point.lat)
+            lon.push(point.lng)
+        }
+
+        let reqLon= lon.join('|')
+        let reqLat = lat.join('|')
+        let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=${reqLon}&lat=${reqLat}&indent=true)`
+        console.log(reqAltiIgn)
+
+        fetch(reqAltiIgn)
+        .then(rep=>rep.json())
+        .then(data=>console.log(data))
+    }
 }
 
 export default Ballade

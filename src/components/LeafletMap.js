@@ -2,6 +2,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
+import { IgnLayer, mapboxLayer } from './tileLayers.js'
 
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
 const IGNTOKEN = 'choisirgeoportail'
@@ -49,7 +50,9 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
     let myPromise = new Promise((res, rej) => {
         const elem = document.createElement('div')
         elem.id = divRef
-        elem.style.height = '600px'
+        elem.style.height = '500px'
+        elem.style.width = '500px'
+        //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
         document.body.appendChild(elem)
 
@@ -58,16 +61,21 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
     })
 
     myPromise.then((el) => {
+        
+        const map = L.map(el.id).setView([45, 5], 13)
+        const home = map.locate()
+        //triggered when a location is found
+        map.on('locationfound', (e) => map.flyTo(e.latlng))
 
-        const map = L.map(divRef).setView([44.14, 5.05], 13)
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/outdoors-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: mapboxAccessToken
-        }).addTo(map);
+        IgnLayer('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'png').addTo(map)
+        // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        //     maxZoom: 18,
+        //     id: 'mapbox/outdoors-v11',
+        //     tileSize: 512,
+        //     zoomOffset: -1,
+        //     accessToken: mapboxAccessToken
+        // }).addTo(map);
         //ajoute un trajet à la carte
         // const myTrajet = L.polyline(myPolyline, {
         //     color: 'red',
@@ -91,10 +99,15 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
                 myTrajet.addpoint(e.latlng)
 
 
-               
 
 
-            } else {
+
+            } 
+            else if (isRightButtonPressed) {
+                myTrajet.getElevations()
+            }
+
+            else {
 
 
                 let query = `https://wxs.ign.fr/${IGNTOKEN}/alti/rest/elevation.json?lon=${long}&lat=${lat}`
@@ -113,15 +126,15 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         map.on('dblclick', (e) => {
             //recherche le point le plus proche sur le trajet et l'affiche sous forme de marker
             myTrajet.insertpoint(e.layerPoint)
-            
+
 
 
         })
-        let popup = L.popup({
-            maxWidth: 300,
-        })
-            .setLatLng([43, 2])
-            .setContent('<img width=200 src="./photos/dentelles.jpg" alt="dentelles" />').addTo(map)
+        // let popup = L.popup({
+        //     maxWidth: 300,
+        // })
+        //     .setLatLng([43, 2])
+        //     .setContent('<img width=200 src="./photos/dentelles.jpg" alt="dentelles" />').addTo(map)
 
 
 
