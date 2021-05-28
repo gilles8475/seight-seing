@@ -7,12 +7,15 @@ import PathProfil from './components/PathProfil'
 function component() {
     
     const elem= document.createElement('div')
+
+    
     // const m= testCreateMap("test")
     // testCreateMap('test2', 'dark')
     // testCreateMap('test3', 'sat')
     const map= LeafletMap('leaflet')
+    const myChart= PathProfil('myChart', '700px','700px')
     //elem.appendChild(map)
-    const myProfile = PathProfil('myChart')
+    //PathProfil('myChart').then(htmlElement => elem.appendChild(htmlElement) )
     //elem.appendChild(myProfile)
     // fetch('https://jsonplaceholder.typicode.com/posts/1')
     // .then(res=>res.json())
@@ -27,9 +30,9 @@ function component() {
 
     //     const myMapbox = Mapboxmap('mapbox')
     // }
-     return elem
+     return null
 
 
 }
 
-component()
+document.body.appendChild(component())
