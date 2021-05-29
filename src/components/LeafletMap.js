@@ -2,6 +2,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
+import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer } from './tileLayers.js'
 
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
@@ -48,20 +49,22 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
     let myPromise = new Promise((res, rej) => {
+        
         const elem = document.createElement('div')
         elem.id = divRef
         elem.style.height = '500px'
         elem.style.width = '500px'
         //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
-        document.body.appendChild(elem)
+        
 
         res(elem)
 
     })
 
     myPromise.then((el) => {
-        
+        const rootDiv= document.getElementById('root')
+        rootDiv.appendChild(el)
         const map = L.map(el.id).setView([45, 5], 13)
         const home = map.locate()
         //triggered when a location is found
@@ -104,7 +107,12 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
             } 
             else if (isRightButtonPressed) {
-                myTrajet.getElevations()
+                console.log(myTrajet.getLength())
+                let myProfile=myTrajet.getVerticalProfil()
+                myProfile.then( data=>{
+                   PathProfil(data,"myChart") 
+                })
+                //myTrajet.getElevations()
             }
 
             else {
@@ -130,15 +138,11 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
         })
-        // let popup = L.popup({
-        //     maxWidth: 300,
-        // })
-        //     .setLatLng([43, 2])
-        //     .setContent('<img width=200 src="./photos/dentelles.jpg" alt="dentelles" />').addTo(map)
+        
 
 
 
-        return map
+        return el
     })
 }
 export default LeafletMap

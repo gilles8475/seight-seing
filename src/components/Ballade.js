@@ -59,8 +59,8 @@ class Ballade extends Array {
         this.forEach((value, index) => {
             //for each point on the path we check the distance between the point to insert and the point on the path
             let itemDist = this.idmap.distance(pos, value.getLatLng())
-            
-            console.log('distance from index ' + index + '=' + itemDist);
+
+            //console.log('distance from index ' + index + '=' + itemDist);
             if (itemDist < refDist) {
                 indexToInsert = index
                 refDist = itemDist
@@ -93,27 +93,57 @@ class Ballade extends Array {
 
     }
 
-    getElevations(){
+    getLength() {
+        let length = 0
+        this._path.forEach((value, index) => {
+            index != 0 ? length += this.idmap.distance(value, this._path[index - 1]) : 0
+        })
+        return length
+
+    }
+
+    async getVerticalProfil() {
         //formatage de la requete vers l'api ign de calcul altimétrique. voirhttps://geoservices.ign.fr/documentation/geoservices/alti.html
         //exemple de requete alti https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=0.2367|2.1570&lat=48.0551|46.6077&indent=true
-        
-        let lon=[]
-        let lat=[]
-        
-        for (let point of this._path){
+
+        let lon = []
+        let lat = []
+        let sampling = Math.ceil(this.getLength() / 50) //on va échantilloner la courbe tous les 50 m
+
+        for (let point of this._path) {
             //on fait un tableau de lat et un tableau de long
             lat.push(point.lat)
             lon.push(point.lng)
         }
 
-        let reqLon= lon.join('|')
+        let reqLon = lon.join('|')
         let reqLat = lat.join('|')
-        let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=${reqLon}&lat=${reqLat}&indent=true)`
-        console.log(reqAltiIgn)
+        let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevationLine.json?sampling=${sampling}&lon=${reqLon}&lat=${reqLat}&indent=true)`
 
-        fetch(reqAltiIgn)
-        .then(rep=>rep.json())
-        .then(data=>console.log(data))
+
+        const coordinates= await fetch(reqAltiIgn)
+            .then(rep => rep.json())
+            .then(data => {
+                let elevationPoints = data.elevations
+                
+                //abscisses represent the distance on the track relative to his origin ie the last point is the length of the track
+                let abscisses = elevationPoints.map((value, index) => {
+
+                    const result = index != 0 ? this.idmap.distance(
+                        [value.lat, value.lon], [elevationPoints[index - 1].lat, elevationPoints[index - 1].lon]
+                    ) : 0
+                    return result
+                })
+                for (let i=1; i< abscisses.length; i++){
+                    abscisses[i]+=abscisses[i-1]
+                }
+
+                let ordonnees= data.elevations.map((value)=> value.z)
+                console.log("abscisses: ",abscisses)
+                console.log("ordonnées: ",ordonnees)
+                return([abscisses,ordonnees])
+            })
+        return coordinates
     }
 }
 

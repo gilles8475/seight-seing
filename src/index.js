@@ -4,16 +4,19 @@ import testCreateMap from './components/testCreateMap'
 import LeafletMap from './components/LeafletMap'
 import PathProfil from './components/PathProfil'
 
+import './style.css'
+
 function component() {
     
     const elem= document.createElement('div')
-
+    elem.id = 'root'
+    
     
     // const m= testCreateMap("test")
     // testCreateMap('test2', 'dark')
     // testCreateMap('test3', 'sat')
     const map= LeafletMap('leaflet')
-    const myChart= PathProfil('myChart', '700px','700px')
+    //const myChart= PathProfil('myChart', '500px','500px')
     //elem.appendChild(map)
     //PathProfil('myChart').then(htmlElement => elem.appendChild(htmlElement) )
     //elem.appendChild(myProfile)
@@ -30,7 +33,7 @@ function component() {
 
     //     const myMapbox = Mapboxmap('mapbox')
     // }
-     return null
+     return elem
 
 
 }

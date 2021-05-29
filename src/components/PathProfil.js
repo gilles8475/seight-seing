@@ -6,7 +6,6 @@ let createChartElement = new Promise((res, rej) => {
 
     canvasContainer.appendChild(myCanvas)
 
-    //res(document.body.appendChild(myCanvas))
     res([myCanvas, canvasContainer])
 
 })
@@ -48,13 +47,37 @@ const graphicObject = {
 
 }
 
-const PathProfil = (idref, width='500px',height='500px') => {
+const PathProfil = (data,idref, width='500px',height='500px') => {
+    let [aBs,oRd]= data
+    const config = {
+        type: 'line',
+        data: {
+            labels: aBs,
+            datasets:[{
+                label:'Profil altimétrique',
+                data: oRd,
+                borderColor:'rgb(75,192,192)',
+                tension: 0.1
+            }]
+
+        }
+       ,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    
+    }
     createChartElement.then(([canvas, container]) => {
+        const rootDiv=document.getElementById('root')
         container.id = idref
         container.style.width = width
         container.style.height = height
-        const myChart = new Chart(canvas, graphicObject)
-        document.body.appendChild(container)
+        const myChart = new Chart(canvas, config)
+        rootDiv.appendChild(container)
         return container
     }
     )
