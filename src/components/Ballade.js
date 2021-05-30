@@ -139,8 +139,8 @@ class Ballade extends Array {
                 }
 
                 let ordonnees= data.elevations.map((value)=> value.z)
-                console.log("abscisses: ",abscisses)
-                console.log("ordonnées: ",ordonnees)
+                //console.log("abscisses: ",abscisses)
+                //console.log("ordonnées: ",ordonnees)
                 return([abscisses,ordonnees])
             })
         return coordinates

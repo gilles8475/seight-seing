@@ -4,15 +4,21 @@ import L from 'leaflet'
 const CLEFIGN = "choisirgeoportail"
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
 
-const IgnCartes={
-    IgnPlan:"GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
-    dronesRestrict:"TRANSPORTS.DRONES.RESTRICTIONS",
-    IgnPhotos65:"ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
-    IgnPhotos:"ORTHOIMAGERY.ORTHOPHOTOS"
+export const IgnTypes={
+    IgnPlan:{
+        techName:"GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+        format:"png"
+    },
+    //dronesRestrict:"TRANSPORTS.DRONES.RESTRICTIONS",//mache pas
+    //IgnPhotos65:"ORTHOIMAGERY.ORTHOPHOTOS.1950-1965", //marche pas
+    IgnPhotos:{
+        techName:"ORTHOIMAGERY.ORTHOPHOTOS",
+        format: "jpeg"
+    }
 
 }
 
-export const IgnLayer = (techName, format='png') => L.tileLayer( 
+export const IgnLayer = ({techName, format}) => L.tileLayer( 
 
 
     /*techName correspond au fond de carte fourni par le geoportail 

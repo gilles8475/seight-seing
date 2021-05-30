@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css'
 import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
 import PathProfil from './PathProfil';
-import { IgnLayer, mapboxLayer } from './tileLayers.js'
+import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
 const IGNTOKEN = 'choisirgeoportail'
@@ -49,40 +49,47 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
     let myPromise = new Promise((res, rej) => {
-        
+
         const elem = document.createElement('div')
         elem.id = divRef
         elem.style.height = '500px'
-        elem.style.width = '500px'
+        elem.style.width = '800px'
         //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
-        
+
 
         res(elem)
 
     })
 
     myPromise.then((el) => {
-        const rootDiv= document.getElementById('root')
+        const rootDiv = document.getElementById('root')
         rootDiv.appendChild(el)
-        const map = L.map(el.id).setView([45, 5], 13)
+
+        const layerIgnPhotos= IgnLayer(IgnTypes.IgnPhotos)
+        const layerIgnPlan=IgnLayer(IgnTypes.IgnPlan)
+        const layerMapbox=mapboxLayer
+        
+        
+        const map = L.map(el.id,{
+            center: [42,5],
+            zoom: 10,
+            layers:[layerIgnPlan,layerIgnPhotos,layerMapbox]
+        })
         const home = map.locate()
         //triggered when a location is found
-        map.on('locationfound', (e) => map.flyTo(e.latlng))
-
-        IgnLayer('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'png').addTo(map)
-        // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        //     maxZoom: 18,
-        //     id: 'mapbox/outdoors-v11',
-        //     tileSize: 512,
-        //     zoomOffset: -1,
-        //     accessToken: mapboxAccessToken
-        // }).addTo(map);
-        //ajoute un trajet à la carte
-        // const myTrajet = L.polyline(myPolyline, {
-        //     color: 'red',
-        // })
+        map.on('locationfound', (e) => map.panTo(e.latlng))
+        
+        //IgnLayer(IgnTypes.IgnPhotos).addTo(map)
+        //IgnLayer(IgnTypes.IgnPlan).addTo(map)
+        //mapboxLayer.addTo(map)
+        var baseMaps={
+            "Photos IGN":layerIgnPhotos,
+            "Plan IGN": layerIgnPlan,
+            "Mapbox": layerMapbox
+        }
+        L.control.layers(baseMaps).addTo(map)
+       
 
         const myTrajet = new Ballade(map)
 
@@ -98,19 +105,19 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
             if (isCTRLKeyPressed) {
                 myTrajet.display()
-                console.log('ctrlkey was pressed')
+
                 myTrajet.addpoint(e.latlng)
 
 
 
 
 
-            } 
+            }
             else if (isRightButtonPressed) {
-                console.log(myTrajet.getLength())
-                let myProfile=myTrajet.getVerticalProfil()
-                myProfile.then( data=>{
-                   PathProfil(data,"myChart") 
+                console.log("longueur du trajet: ", myTrajet.getLength())
+                let myProfile = myTrajet.getVerticalProfil()
+                myProfile.then(data => {
+                    PathProfil(data, "myChart")
                 })
                 //myTrajet.getElevations()
             }
@@ -138,7 +145,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
         })
-        
+
 
 
 
