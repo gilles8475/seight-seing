@@ -106,9 +106,11 @@ class Ballade extends Array {
         //formatage de la requete vers l'api ign de calcul altimétrique. voirhttps://geoservices.ign.fr/documentation/geoservices/alti.html
         //exemple de requete alti https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=0.2367|2.1570&lat=48.0551|46.6077&indent=true
 
+        const samplingValue=100 //adjust here if you want different sampling 100 means 1 point each 100m
+
         let lon = []
         let lat = []
-        let sampling = Math.ceil(this.getLength() / 50) //on va échantilloner la courbe tous les 50 m
+        let sampling = Math.ceil(this.getLength() / samplingValue) 
 
         for (let point of this._path) {
             //on fait un tableau de lat et un tableau de long

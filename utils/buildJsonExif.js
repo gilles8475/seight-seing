@@ -6,7 +6,7 @@ const path = require('path')
 
 const _arg = process.argv.slice(2)[0] //array of arguments passed on the command line
 const arg = path.resolve(_arg)
-console.log('dirname :', path.resolve(arg));
+//console.log('dirname :', path.resolve(arg));
 
 
 
@@ -17,8 +17,8 @@ const convertGeoRef = (({ GPSLatitude, GPSLongitude, GPSLatitudeRef, GPSLongitud
     try {
         let secOfLat = GPSLatitude[2] / 60
         let secOfLong = GPSLongitude[2] / 60
-        let minOfLat = secOfLat + GPSLatitude[1] / 60
-        let minOfLong = secOfLong + GPSLongitude[1] / 60
+        let minOfLat = (secOfLat + GPSLatitude[1]) / 60
+        let minOfLong = (secOfLong + GPSLongitude[1]) / 60
 
         let decimalLatitude = GPSLatitude[0] + minOfLat
         let decimalLongitude = GPSLongitude[0] + minOfLong
@@ -39,7 +39,7 @@ const convertGeoRef = (({ GPSLatitude, GPSLongitude, GPSLatitudeRef, GPSLongitud
 getExifFromDir(arg).then(data => {
     
     const customData = []//to store only needed datas in the returned array
-
+    const targetDir = '/photos/'
     for (item of data) {
 
         let {
@@ -49,7 +49,7 @@ getExifFromDir(arg).then(data => {
         } = item
         let o = { filename, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef, GPSAltitude, CreateDate }
         let { decimalLatitude: lat, decimalLongitude: long } = convertGeoRef(o)
-        o = { ...o, latitude: lat, longitude: long }
+        o = { ...o, latitude: lat, longitude: long, filename:targetDir+filename }
         customData.push(o)
         
 

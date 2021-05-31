@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
 import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
+import ExifDatas from '../../exifdataFile.json'
 
 const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
 const IGNTOKEN = 'choisirgeoportail'
@@ -52,7 +53,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
         const elem = document.createElement('div')
         elem.id = divRef
-        elem.style.height = '500px'
+        elem.style.height = '600px'
         elem.style.width = '800px'
         //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
@@ -66,31 +67,52 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         const rootDiv = document.getElementById('root')
         rootDiv.appendChild(el)
 
-        const layerIgnPhotos= IgnLayer(IgnTypes.IgnPhotos)
-        const layerIgnPlan=IgnLayer(IgnTypes.IgnPlan)
-        const layerMapbox=mapboxLayer
-        
-        
-        const map = L.map(el.id,{
-            center: [42,5],
+        const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
+        const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
+        const layerMapbox = mapboxLayer
+
+
+        const map = L.map(el.id, {
+            center: [42, 5],
             zoom: 10,
-            layers:[layerIgnPlan,layerIgnPhotos,layerMapbox]
+            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox]
         })
         const home = map.locate()
         //triggered when a location is found
         map.on('locationfound', (e) => map.panTo(e.latlng))
-        
+
         //IgnLayer(IgnTypes.IgnPhotos).addTo(map)
         //IgnLayer(IgnTypes.IgnPlan).addTo(map)
         //mapboxLayer.addTo(map)
-        var baseMaps={
-            "Photos IGN":layerIgnPhotos,
+        var baseMaps = {
+            "Photos IGN": layerIgnPhotos,
             "Plan IGN": layerIgnPlan,
             "Mapbox": layerMapbox
         }
         L.control.layers(baseMaps).addTo(map)
-       
 
+
+        /*ajout des markers */
+        for (let img of ExifDatas) {
+            let [lat, lon] = [img.latitude, img.longitude]
+            console.log("lat-long: ", lat, "-", lon);
+            if (lat) {
+
+                let markerOption = {
+                    title: img.filename
+                }
+
+                let M = L.marker([lat, lon], markerOption).addTo(map)
+                M.on('mouseover',
+                    (event) => {
+                        let el = document.getElementById('pano')
+                        el.src = img.filename
+                    }
+
+                )
+
+            }
+        }
         const myTrajet = new Ballade(map)
 
 
@@ -117,6 +139,8 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
                 console.log("longueur du trajet: ", myTrajet.getLength())
                 let myProfile = myTrajet.getVerticalProfil()
                 myProfile.then(data => {
+                    /*création d'une vue qui affiche le profil alti du trajet
+                     à l'aide de charte js*/
                     PathProfil(data, "myChart")
                 })
                 //myTrajet.getElevations()

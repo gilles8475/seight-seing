@@ -25,7 +25,7 @@ async function getExifFromFile(filename) {
                 if (error) {
                     rej(error)
 
-                    console.log('Error: ' + error.message);
+                    console.log('Erreur : ' + filename+' '+error.message);
                 }
                 else {
                     // Do something with your data!
@@ -59,7 +59,7 @@ async function getExifFromDir(dirname) {
         //console.log(filename);
 
         let data = await getExifFromFile(filename)
-        data = { ...data, filename: filename };
+        data = { ...data, filename: f };
         tabExif.push(data)
     }
     return tabExif
