@@ -5,13 +5,20 @@ import Ballade from './Ballade';
 import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
-import {mapboxToken} from '../../secret'
+import { mapboxToken } from '../../secret'
+import iconPaysage from '../assets/icons8-alpes-80.png'
 
 
 const IGNTOKEN = 'choisirgeoportail'
 //mapboxgl.accessToken = mapboxToken
 //const myPolyline = []
 let myDivIcon = L.divIcon()
+const panoIcon = L.icon({
+    iconUrl: iconPaysage,
+    iconSize: [20, 20],
+
+
+})
 
 
 
@@ -81,7 +88,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         const map = L.map(el.id, {
             center: [42, 5],
             zoom: 10,
-            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox,layerPov ]
+            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox, layerPov]
         })
         const home = map.locate()
         //triggered when a location is found
@@ -96,11 +103,11 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
             "Mapbox": layerMapbox
         }
 
-        const pov={"pointof view": layerPov}
-        L.control.layers(baseMaps,pov).addTo(map)
+        const pov = { "pointof view": layerPov }
+        L.control.layers(baseMaps, pov).addTo(map)
         /*layer group for the markers*/
 
-        
+
 
         /*ajout des markers */
         for (let img of ExifDatas) {
@@ -109,7 +116,8 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
             if (lat) {
 
                 let markerOption = {
-                    title: img.filename
+                    title: img.filename,
+                    icon:panoIcon
                 }
 
                 let M = L.marker([lat, lon], markerOption).addTo(layerPov)
