@@ -6,6 +6,8 @@ import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
 import { mapboxToken } from '../../secret'
+
+//icone that will be displayed for markers
 import iconPaysage from '../assets/icons8-alpes-80.png'
 
 
