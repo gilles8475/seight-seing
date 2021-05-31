@@ -3,3 +3,4 @@ trash
 dist
 .vscode
 .eslintrc.js
+secret.js

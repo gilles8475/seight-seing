@@ -1,5 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
+import mapboxToken from '../../secret'
 
 
 const Mapboxmap = (divRef) => {
@@ -8,7 +9,7 @@ const Mapboxmap = (divRef) => {
     
     const style = 'mapbox://styles/mapbox/outdoors-v11'
     
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
+    mapboxgl.accessToken = mapboxToken;
     
     const map = new mapboxgl.Map({
         container: divRef, // container ID

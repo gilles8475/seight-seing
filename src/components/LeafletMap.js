@@ -5,8 +5,9 @@ import Ballade from './Ballade';
 import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
+import mapboxToken from '../../secret'
 
-const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
+const mapboxAccessToken = mapboxToken;
 const IGNTOKEN = 'choisirgeoportail'
 mapboxgl.accessToken = mapboxAccessToken
 const myPolyline = []
