@@ -70,12 +70,12 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
         const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
         const layerMapbox = mapboxLayer
-
+        const layerPov = L.layerGroup([])
 
         const map = L.map(el.id, {
             center: [42, 5],
             zoom: 10,
-            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox]
+            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox,layerPov ]
         })
         const home = map.locate()
         //triggered when a location is found
@@ -84,13 +84,17 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         //IgnLayer(IgnTypes.IgnPhotos).addTo(map)
         //IgnLayer(IgnTypes.IgnPlan).addTo(map)
         //mapboxLayer.addTo(map)
-        var baseMaps = {
+        const baseMaps = {
             "Photos IGN": layerIgnPhotos,
             "Plan IGN": layerIgnPlan,
             "Mapbox": layerMapbox
         }
-        L.control.layers(baseMaps).addTo(map)
 
+        const pov={"pointof view": layerPov}
+        L.control.layers(baseMaps,pov).addTo(map)
+        /*layer group for the markers*/
+
+        
 
         /*ajout des markers */
         for (let img of ExifDatas) {
@@ -102,7 +106,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
                     title: img.filename
                 }
 
-                let M = L.marker([lat, lon], markerOption).addTo(map)
+                let M = L.marker([lat, lon], markerOption).addTo(layerPov)
                 M.on('mouseover',
                     (event) => {
                         let el = document.getElementById('pano')
