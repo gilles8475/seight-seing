@@ -1,17 +1,21 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import mapboxgl from 'mapbox-gl';
+//import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
 import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
-import mapboxToken from '../../secret'
+import {mapboxToken} from '../../secret'
 
-const mapboxAccessToken = mapboxToken;
+
 const IGNTOKEN = 'choisirgeoportail'
-mapboxgl.accessToken = mapboxAccessToken
-const myPolyline = []
+//mapboxgl.accessToken = mapboxToken
+//const myPolyline = []
 let myDivIcon = L.divIcon()
+
+
+
+
 
 /* This code is needed to properly load the images in the Leaflet CSS */
 delete L.Icon.Default.prototype._getIconUrl;
@@ -22,10 +26,10 @@ L.Icon.Default.mergeOptions({
 });
 
 function getElevation(lat, lng) {
-    // Construct the API request
+    // Construct the API request to get elevation of a point
     console.log(lat);
     console.log(lng);
-    let querymapbox = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=' + mapboxgl.accessToken
+    //let querymapbox = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=' + mapboxToken
     let query = `https://wxs.ign.fr/${IGNTOKEN}/alti/rest/elevation.json?lon=${lng}&lat=${lat}`
 
 
@@ -69,6 +73,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         rootDiv.appendChild(el)
 
         const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
+        //console.log('loading ign :', IgnTypes.IgnPhotos);
         const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
         const layerMapbox = mapboxLayer
         const layerPov = L.layerGroup([])
@@ -100,7 +105,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         /*ajout des markers */
         for (let img of ExifDatas) {
             let [lat, lon] = [img.latitude, img.longitude]
-            console.log("lat-long: ", lat, "-", lon);
+            //console.log("lat-long: ", lat, "-", lon);
             if (lat) {
 
                 let markerOption = {

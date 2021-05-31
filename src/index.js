@@ -10,7 +10,7 @@ function component() {
 
     const elem = document.createElement('div')
     elem.id = 'root'
-    console.log(ExifDatas);
+    //console.log(ExifDatas);
     // const imgContainer = document.createElement('div')
     
     // imgContainer.style.width = '200px'
