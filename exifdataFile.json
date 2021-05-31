@@ -1,0 +1,138 @@
+[
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6234.JPG",
+        "GPSLatitude": [
+            44,
+            8,
+            57.89
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            5,
+            1,
+            34.22
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 528.893154190659,
+        "CreateDate": "2020:05:12 17:38:16",
+        "latitude": 45.098166666666664,
+        "longitude": 5.587
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6326.JPG",
+        "GPSLatitude": [
+            44,
+            50,
+            24.06
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            5,
+            32,
+            54.31
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 2029.4312393887947,
+        "CreateDate": "2020:06:06 13:59:06",
+        "latitude": 45.23433333333333,
+        "longitude": 6.4384999999999994
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6391.JPG",
+        "GPSLatitude": [
+            45,
+            56,
+            46
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            6,
+            51,
+            5.29
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 2121.7417640807653,
+        "CreateDate": "2020:08:05 09:08:05",
+        "latitude": 46.7,
+        "longitude": 6.938166666666667
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6424.JPG",
+        "GPSLatitude": [
+            45,
+            55,
+            55.02
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            6,
+            55,
+            4.15
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 1902.0845588235295,
+        "CreateDate": "2020:08:06 14:15:38",
+        "latitude": 46.833666666666666,
+        "longitude": 6.985833333333334
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6473.JPG",
+        "GPSLatitude": [
+            44,
+            10,
+            15.69
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            5,
+            4,
+            0.53
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 439.60671641791043,
+        "CreateDate": "2020:08:31 11:04:50",
+        "latitude": 44.42816666666667,
+        "longitude": 5.0755
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6597.JPG",
+        "GPSLatitude": [
+            44,
+            7,
+            37.83
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            5,
+            2,
+            18.42
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 150.32310344827587,
+        "CreateDate": "2020:10:24 16:32:07",
+        "latitude": 44.747166666666665,
+        "longitude": 5.340333333333334
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/IMG_6599.JPG",
+        "GPSLatitude": [
+            44,
+            8,
+            33.32
+        ],
+        "GPSLatitudeRef": "N",
+        "GPSLongitude": [
+            5,
+            1,
+            44.63
+        ],
+        "GPSLongitudeRef": "E",
+        "GPSAltitude": 281.5318268618714,
+        "CreateDate": "2020:10:24 17:00:10",
+        "latitude": 44.68866666666667,
+        "longitude": 5.7605
+    },
+    {
+        "filename": "/home/gilles/Documents/node/babel-webpack-tuto/dist/photos/dentelles.jpg"
+    }
+]
