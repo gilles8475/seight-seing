@@ -12,7 +12,7 @@ const readline = require('readline').createInterface({
       } catch (err) {
         console.error(err)
       }
-    // console.log(`creating secret.js with ${token} token!`);
+    console.log(`creating secret.js with ${token} token!`);
 
     readline.close();
   });
