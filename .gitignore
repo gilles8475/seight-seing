@@ -2,3 +2,5 @@ node_modules
 trash
 dist
 .vscode
+.eslintrc.js
+secret.js

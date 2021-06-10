@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
+        babel:{
+            import:'@babel/polyfill'
+        },
         index: {
             import: './src/index.js',
             dependOn: 'shared',

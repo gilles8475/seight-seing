@@ -6,3 +6,8 @@
     height: 500px;
     border: 1px solid green;
 }
+
+#root {
+    display:flex;
+    flex-direction: row;
+}

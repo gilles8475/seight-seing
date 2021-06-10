@@ -1,12 +1,30 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import mapboxgl from 'mapbox-gl';
+//import mapboxgl from 'mapbox-gl';
+import Ballade from './Ballade';
+import PathProfil from './PathProfil';
+import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
+import ExifDatas from '../../exifdataFile.json'
+import { mapboxToken } from '../../secret'
 
-const mapboxAccessToken = 'pk.eyJ1IjoiZ2lsbGVzODQ3NSIsImEiOiJjazdmcmtuM2YwNWZrM2VuNjlrbnNldGI3In0.NVN_OrsfDaW6RfsQzwY4jg';
+//icone that will be displayed for markers
+import iconPaysage from '../assets/icons8-alpes-80.png'
+
+
 const IGNTOKEN = 'choisirgeoportail'
-mapboxgl.accessToken = mapboxAccessToken
-const myPolyline = []
+//mapboxgl.accessToken = mapboxToken
+//const myPolyline = []
 let myDivIcon = L.divIcon()
+const panoIcon = L.icon({
+    iconUrl: iconPaysage,
+    iconSize: [20, 20],
+
+
+})
+
+
+
+
 
 /* This code is needed to properly load the images in the Leaflet CSS */
 delete L.Icon.Default.prototype._getIconUrl;
@@ -17,10 +35,10 @@ L.Icon.Default.mergeOptions({
 });
 
 function getElevation(lat, lng) {
-    // Construct the API request
+    // Construct the API request to get elevation of a point
     console.log(lat);
     console.log(lng);
-    let querymapbox = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=' + mapboxgl.accessToken
+    //let querymapbox = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=' + mapboxToken
     let query = `https://wxs.ign.fr/${IGNTOKEN}/alti/rest/elevation.json?lon=${lng}&lat=${lat}`
 
 
@@ -46,84 +64,109 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
     let myPromise = new Promise((res, rej) => {
+
         const elem = document.createElement('div')
         elem.id = divRef
         elem.style.height = '600px'
+        elem.style.width = '800px'
+        //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
-        document.body.appendChild(elem)
+
 
         res(elem)
 
     })
 
     myPromise.then((el) => {
+        const rootDiv = document.getElementById('root')
+        rootDiv.appendChild(el)
 
-        const map = L.map(divRef).setView([44.14, 5.05], 13)
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/outdoors-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: mapboxAccessToken
-        }).addTo(map);
-        //ajoute un trajet à la carte
-        const myTrajet = L.polyline(myPolyline, {
-            color: 'red',
+        const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
+        //console.log('loading ign :', IgnTypes.IgnPhotos);
+        const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
+        const layerMapbox = mapboxLayer
+        const layerPov = L.layerGroup([])
 
-
+        const map = L.map(el.id, {
+            center: [42, 5],
+            zoom: 10,
+            layers: [layerIgnPlan, layerIgnPhotos, layerMapbox, layerPov]
         })
-            .addTo(map)
+        const home = map.locate()
+        //triggered when a location is found
+        map.on('locationfound', (e) => map.panTo(e.latlng))
 
-        // myTrajet.on('mouseover',(e)=>{
-        //     myTrajet.bindPopup('<h1>Test popup</h1>').openPopup()
+        //IgnLayer(IgnTypes.IgnPhotos).addTo(map)
+        //IgnLayer(IgnTypes.IgnPlan).addTo(map)
+        //mapboxLayer.addTo(map)
+        const baseMaps = {
+            "Photos IGN": layerIgnPhotos,
+            "Plan IGN": layerIgnPlan,
+            "Mapbox": layerMapbox
+        }
+
+        const pov = { "pointof view": layerPov }
+        L.control.layers(baseMaps, pov).addTo(map)
+        /*layer group for the markers*/
 
 
-        //})
-        var marker = L.marker([44, 5]).addTo(map);
+
+        /*ajout des markers */
+        for (let img of ExifDatas) {
+            let [lat, lon] = [img.latitude, img.longitude]
+            //console.log("lat-long: ", lat, "-", lon);
+            if (lat) {
+
+                let markerOption = {
+                    title: img.filename,
+                    icon:panoIcon
+                }
+
+                let M = L.marker([lat, lon], markerOption).addTo(layerPov)
+                M.on('mouseover',
+                    (event) => {
+                        let el = document.getElementById('pano')
+                        el.src = img.filename
+                    }
+
+                )
+
+            }
+        }
+        const myTrajet = new Ballade(map)
 
 
         const handleClick = (e) => {
 
             let isCTRLKeyPressed = e.originalEvent.ctrlKey
+
             let isRightButtonPressed = e.originalEvent.button == 2 ? true : false
             let lat = e.latlng.lat
             let long = e.latlng.lng
             //console.log(e.originalEvent.button);
 
             if (isCTRLKeyPressed) {
+                myTrajet.display()
 
-                console.log('ctrlkey was pressed')
+                myTrajet.addpoint(e.latlng)
 
-                //let myPoint=L.circle(e.latlng)
-                let myPoint = L.marker(e.latlng, {
-                    icon: myDivIcon,
-                    draggable: true,
+
+
+
+
+            }
+            else if (isRightButtonPressed) {
+                console.log("longueur du trajet: ", myTrajet.getLength())
+                let myProfile = myTrajet.getVerticalProfil()
+                myProfile.then(data => {
+                    /*création d'une vue qui affiche le profil alti du trajet
+                     à l'aide de charte js*/
+                    PathProfil(data, "myChart")
                 })
-                    .addTo(map)
-                myPoint.on('drag', () => {
-                    let myPath = myPolyline.map((value) => value.getLatLng())
-                    myTrajet.setLatLngs(myPath)
-                })
+                //myTrajet.getElevations()
+            }
 
-                //ajoute un poin au chemin
-                myPolyline.push(myPoint)
-                //myPoint.addTo(map)
-                let myPath = myPolyline.map((value) => value.getLatLng())
-                //console.log(myPath);
-                myTrajet.setLatLngs(myPath)
-
-                //console.log(myPolyline);
-            } else if (isRightButtonPressed) {
-                console.log('rightButton pressed');
-                const myTrajet = L.polygon(myPolyline, {
-                    color: 'blue',
-                    weight: 1,
-                })
-                    .addTo(map)
-
-
-            } else {
+            else {
 
 
                 let query = `https://wxs.ign.fr/${IGNTOKEN}/alti/rest/elevation.json?lon=${long}&lat=${lat}`
@@ -136,68 +179,21 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         }
 
         map.on('mousedown', handleClick)
-        //map.on('mousedown', (e) => console.log(e.originalEvent.ctrlKey))
+
 
 
         map.on('dblclick', (e) => {
             //recherche le point le plus proche sur le trajet et l'affiche sous forme de marker
+            myTrajet.insertpoint(e.layerPoint)
 
-            const a = myTrajet.closestLayerPoint(e.layerPoint)
-            console.clear()
-            console.log(e.latlng)
-            console.log(a);
-            let pos = map.layerPointToLatLng(a)// donne les coordonnées geo du point
-
-            let newMark = L.marker((pos), { icon: myDivIcon, draggable: true }).addTo(map) //crée un marker sur le trajet
-            //now we have to integrate this marker in the myPolyline array. myPoliline is an array of marker
-
-            let refDist = map.distance(pos, myPolyline[0].getLatLng())
-            let indexToInsert = 0
-            myPolyline.forEach((value, index) => {
-                //for each point on the path we check the distance between the point to insert and the point on the path
-                let itemDist = map.distance(pos, value.getLatLng())
-                if (itemDist < refDist) {
-                    indexToInsert = index
-                    refDist = itemDist
-                }
-            })
-
-            //now we are not sure that the closest point on the path is after or before the point to insert
-            //we have to test if the point is before or after the point found on the path
-            //to do that we calculate the distance between the point to insert and the points with indexToInsert and indexToInsert +1
-
-            if (indexToInsert != 0) {
-                let epsilon = 0.001 //marge d'incertitude pour les comparaisons
-                let returnedPoint = myPolyline[indexToInsert].getLatLng()
-                let beforeReturnedPoint = myPolyline[indexToInsert - 1].getLatLng()
-                let test = (map.distance(pos, returnedPoint) + map.distance(pos, beforeReturnedPoint) - epsilon > map.distance(beforeReturnedPoint, returnedPoint))
-
-                // console.log(
-                //     test
-                // );
-
-
-                let beforeOrAfter = test ? 0 : 1
-                indexToInsert -= beforeOrAfter
-
-
-            }
-            myPolyline.splice(indexToInsert + 1, 0, newMark)
-            let myPath = myPolyline.map((value) => value.getLatLng())
-            myTrajet.setLatLngs(myPath)
-            console.log(myPolyline.length);
 
 
         })
-        let popup = L.popup({
-            maxWidth: 300,
-        })
-            .setLatLng([43, 2])
-            .setContent('<img width=200 src="./photos/dentelles.jpg" alt="dentelles" />').addTo(map)
 
 
 
-        return map
+
+        return el
     })
 }
 export default LeafletMap
