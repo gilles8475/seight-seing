@@ -10,10 +10,10 @@ module.exports = {
             import: './src/index.js',
             dependOn: 'shared',
         },
-        grat: {
+        /*grat: {
             import: './src/Greeting.js',
             dependOn: 'shared'
-        },
+        },*/
         shared: 'lodash',
     },
 

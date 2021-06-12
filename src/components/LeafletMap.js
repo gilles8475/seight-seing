@@ -123,6 +123,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
                 }
 
                 let M = L.marker([lat, lon], markerOption).addTo(layerPov)
+                //change the image in the 'pano' element to see the associated image
                 M.on('mouseover',
                     (event) => {
                         let el = document.getElementById('pano')

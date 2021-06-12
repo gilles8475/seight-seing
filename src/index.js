@@ -1,6 +1,6 @@
 
 //import Mapboxmap from './components/mapbox';
-import testCreateMap from './components/testCreateMap'
+//import testCreateMap from './components/testCreateMap'
 import LeafletMap from './components/LeafletMap'
 import PathProfil from './components/PathProfil'
 import './style.css'
@@ -21,8 +21,8 @@ function component() {
     const image = document.createElement('img')
     image.id='pano'
     image.src = ExifDatas[0].filename
-    image.width=600
-    image.height=800
+    image.width=400
+    image.height=400
     image.style.objectFit='contain'
 
     elem.appendChild(image)

@@ -105,7 +105,8 @@ class Ballade extends Array {
     async getVerticalProfil() {
         //formatage de la requete vers l'api ign de calcul altimétrique. voirhttps://geoservices.ign.fr/documentation/geoservices/alti.html
         //exemple de requete alti https://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon=0.2367|2.1570&lat=48.0551|46.6077&indent=true
-
+        // this async method return an object containing points with altitude along the track. the distance
+        //between each points on the track is equal to the "sampling"
         const samplingValue=100 //adjust here if you want different sampling 100 means 1 point each 100m
 
         let lon = []
@@ -114,11 +115,13 @@ class Ballade extends Array {
 
         for (let point of this._path) {
             //on fait un tableau de lat et un tableau de long
+            //create an array of lat
             lat.push(point.lat)
             lon.push(point.lng)
         }
-
+        
         let reqLon = lon.join('|')
+        
         let reqLat = lat.join('|')
         let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevationLine.json?sampling=${sampling}&lon=${reqLon}&lat=${reqLat}&indent=true)`
 
@@ -127,20 +130,20 @@ class Ballade extends Array {
             .then(rep => rep.json())
             .then(data => {
                 let elevationPoints = data.elevations
-                
+                console.log("élévation points: ",elevationPoints);
                 //abscisses represent the distance on the track relative to his origin ie the last point is the length of the track
                 let abscisses = elevationPoints.map((value, index) => {
 
-                    const result = index != 0 ? this.idmap.distance(
+                    const result = index != 0 ? Math.ceil(this.idmap.distance(
                         [value.lat, value.lon], [elevationPoints[index - 1].lat, elevationPoints[index - 1].lon]
-                    ) : 0
+                    ) ): 0
                     return result
                 })
                 for (let i=1; i< abscisses.length; i++){
                     abscisses[i]+=abscisses[i-1]
                 }
 
-                let ordonnees= data.elevations.map((value)=> value.z)
+                let ordonnees= data.elevations.map((value)=> Math.ceil(value.z))
                 //console.log("abscisses: ",abscisses)
                 //console.log("ordonnées: ",ordonnees)
                 return([abscisses,ordonnees])
