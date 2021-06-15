@@ -111,7 +111,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
 
-        /*ajout des markers */
+        /*add a marker for each photos in the photos folder, photos datas are stored in ExifDatas*/
         for (let img of ExifDatas) {
             let [lat, lon] = [img.latitude, img.longitude]
             //console.log("lat-long: ", lat, "-", lon);
@@ -162,7 +162,12 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
                 myProfile.then(data => {
                     /*création d'une vue qui affiche le profil alti du trajet
                      à l'aide de charte js*/
-                    PathProfil(data, "myChart")
+                    PathProfil(data, "myChart",myTrajet)
+
+                    /*test de la methode getPointFromOdo de la classe ballade
+                    //on met un marker au milieu du trajet
+                    let middlePoint= myTrajet.getPointFromOdo(0*myTrajet.getLength()/1)
+                    const middleMarker= L.marker(middlePoint).addTo(map)*/
                 })
                 //myTrajet.getElevations()
             }
@@ -184,7 +189,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
 
         map.on('dblclick', (e) => {
-            //recherche le point le plus proche sur le trajet et l'affiche sous forme de marker
+            //insert un point sur le trajet
             myTrajet.insertpoint(e.layerPoint)
 
 

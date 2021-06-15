@@ -58,7 +58,7 @@ const graphicObject = {
 
 }
 
-const PathProfil = (data, idref, width = '500px', height = '800px') => {
+const PathProfil = (data, idref,trajetRef, width = '500px', height = '800px') => {
     let [aBs, oRd] = data
     const config = {
         type: 'line',
@@ -76,6 +76,7 @@ const PathProfil = (data, idref, width = '500px', height = '800px') => {
         options: {
             interaction: {
                 mode: 'index',
+                intersect:false,
             },
             aspectRatio:1.2,
             decimation:{
@@ -91,6 +92,7 @@ const PathProfil = (data, idref, width = '500px', height = '800px') => {
                 tooltip: {
                     usePointStyle: true,
                     callbacks: {
+                      
                         labelPointStyle: function(context){
                             return {
                                 pointStyle:'triangle',
@@ -113,11 +115,12 @@ const PathProfil = (data, idref, width = '500px', height = '800px') => {
                             let y2 = context.dataset.data[i + 1]
                             let x2 = aBs[i + 1]
                             let slope = 100 * (y2 - y1) / (x2 - x1)
-
+                            
                             // console.log('data index', context.dataIndex)
-                            // console.log('abscisse:', labels  )
-
-                            return ([slope.toFixed(1) + '%', context.formattedValue])
+                            let l=context.formattedValue //abscisse ie lenth on the path
+                            trajetRef.setOdoMarker(x1.valueOf())
+                            
+                            return ([slope.toFixed(1) + '%', "z: "+l])
                         }
                     }
                 }

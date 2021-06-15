@@ -9,6 +9,7 @@ class Ballade extends Array {
         this.icon = L.divIcon()
         this._path = [] //un tableau des coordonnées des points de la trace
         this.track = L.polyline(this._path, { color: 'red' })//la trace sur la carte
+        this.odoMarker=L.marker()
     }
 
     display() {
@@ -24,6 +25,10 @@ class Ballade extends Array {
 
     }
 
+    setOdoMarker(length){
+        
+        this.odoMarker.setLatLng(this.getPointFromOdo(length)).addTo(this.idmap)
+    }    
     addpoint(latlong) {
         let newMark = L.marker(latlong, {
             icon: this.icon,
@@ -99,6 +104,39 @@ class Ballade extends Array {
             index != 0 ? length += this.idmap.distance(value, this._path[index - 1]) : 0
         })
         return length
+
+    }
+
+    getPointFromOdo(length){
+        //return a point on the track given a distance from the origin of the track
+        let lref=0
+        let index=0
+       
+        while (lref<=length){
+            //search where is the point on the track
+            //loop out when at the index where the point is just before
+            index++
+            
+            lref+=this.idmap.distance(this._path[index],this._path[index-1])
+            
+        }
+        
+        let lSegment= this.idmap.distance(this._path[index],this._path[index-1])//variable to store the length of the segment where the point has be be set
+        
+        let reldist= length-lref+lSegment //give the distance on relative length of the searched point on the segment (ie distance from searched point to this._path[index-1])
+        //now we have 3 points on a line and two distances. we will use trigo to find the coordinates of the points
+        //first we convert lat long in cartesian point
+        let P1=this.idmap.latLngToLayerPoint(this._path[index-1])
+        let P2=this.idmap.latLngToLayerPoint(this._path[index])
+        //then we apply for vector P1M = (reldist/lSegment)P1P2 (since P1 M and P2 are aligned, M is the searched point)
+
+        let X= (reldist/lSegment)*(P2.x-P1.x)+P1.x
+        let Y= (reldist/lSegment)*(P2.y-P1.y)+P1.y
+
+        // now we convert this point in geo ref
+        let M= this.idmap.layerPointToLatLng([X,Y])
+        return M
+        
 
     }
 
