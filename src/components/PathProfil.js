@@ -9,6 +9,7 @@ const createChartElement = (id) => {
     const myPromise = new Promise((res, rej) => {
         console.log('creating canvas');
         let canvasContainer = document.createElement('div')
+        canvasContainer.classList.add('chart')
         
         let myCanvas = document.createElement('canvas')
 
@@ -58,7 +59,7 @@ const graphicObject = {
 
 }
 
-const PathProfil = (data, idref,trajetRef, width = '500px', height = '800px') => {
+const PathProfil = (data, idref,trajetRef) => {
     let [aBs, oRd] = data
     const config = {
         type: 'line',
@@ -133,8 +134,8 @@ const PathProfil = (data, idref,trajetRef, width = '500px', height = '800px') =>
     createChartElement(idref).then(([canvas, container]) => {
         const rootDiv = document.getElementById('root')
         container.id = idref
-        container.style.width = width
-        container.style.height = height
+        //container.style.width = width
+        //container.style.height = height
         let myChart = new Chart(canvas, config)
         rootDiv.appendChild(container)
         return container

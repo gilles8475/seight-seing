@@ -19,11 +19,12 @@ function component() {
     
     // elem.appendChild(imgContainer)
     const image = document.createElement('img')
+    image.classList.add('pano')
     image.id='pano'
     image.src = ExifDatas[0].filename
-    image.width=400
+    /*image.width=400
     image.height=400
-    image.style.objectFit='contain'
+    image.style.objectFit='contain'*/
 
     elem.appendChild(image)
 

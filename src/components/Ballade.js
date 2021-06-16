@@ -3,13 +3,15 @@ import 'leaflet/dist/leaflet.css'
 
 class Ballade extends Array {
 
-    constructor(idmap) {
+    constructor(idmap, initialPath=[]) {
         super()
         this.idmap = idmap
         this.icon = L.divIcon()
-        this._path = [] //un tableau des coordonnées des points de la trace
+        this._path = initialPath //un tableau des coordonnées des points de la trace
+        this._path.forEach(item=>this.addpoint(item))
         this.track = L.polyline(this._path, { color: 'red' })//la trace sur la carte
         this.odoMarker=L.marker()
+        this._title=""
     }
 
     display() {
@@ -24,12 +26,20 @@ class Ballade extends Array {
         this.track.setLatLngs(path)
 
     }
+    set title(title){
+        this._title=title
+    }
+
+    get title(){
+        return this._title
+    }
 
     setOdoMarker(length){
         
         this.odoMarker.setLatLng(this.getPointFromOdo(length)).addTo(this.idmap)
     }    
     addpoint(latlong) {
+        //console.log(latlong)
         let newMark = L.marker(latlong, {
             icon: this.icon,
             draggable: true,

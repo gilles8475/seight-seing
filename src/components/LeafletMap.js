@@ -54,7 +54,7 @@ function getElevation(lat, lng) {
 
 
 
-function LeafletMap(divRef, mapstyle = 'outdoors') {
+function LeafletMap(divRef) {
     //console.log(mapstyle)
     //const style = 'mapbox://styles/mapbox/outdoors-v11'
     //const style= stylesMap[mapstyle]
@@ -67,8 +67,8 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
         const elem = document.createElement('div')
         elem.id = divRef
-        elem.style.height = '600px'
-        elem.style.width = '800px'
+        elem.classList.add('map')
+        
         //prevent navigator context menu to open on right click
         elem.addEventListener("contextmenu", event => event.preventDefault())
 
@@ -96,9 +96,7 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
         //triggered when a location is found
         map.on('locationfound', (e) => map.panTo(e.latlng))
 
-        //IgnLayer(IgnTypes.IgnPhotos).addTo(map)
-        //IgnLayer(IgnTypes.IgnPlan).addTo(map)
-        //mapboxLayer.addTo(map)
+        
         const baseMaps = {
             "Photos IGN": layerIgnPhotos,
             "Plan IGN": layerIgnPlan,
@@ -134,7 +132,24 @@ function LeafletMap(divRef, mapstyle = 'outdoors') {
 
             }
         }
+        //instanciate a ballade
         const myTrajet = new Ballade(map)
+        //create a button
+        const but=document.createElement('button')
+        but.classList.add('button')
+        but.innerHTML="Store track"
+        but.onclick= ()=>{
+            if (myTrajet.path[0]){
+                myTrajet.title=prompt("Enter a title for this track")
+                const storeData= {title:myTrajet.title, path:myTrajet.path}
+                alert(JSON.stringify(myTrajet.path))
+                localStorage.setItem(myTrajet.title,JSON.stringify(myTrajet.path))
+
+            }else {
+                alert('there is no trajet')
+            }
+        }
+        rootDiv.appendChild(but)
 
 
         const handleClick = (e) => {

@@ -1,13 +1,44 @@
 .hello {
     color: red;
 }
+.pano {
+    height:400px;
+    width:400px;
+    object-fit: contain;
+    box-shadow: 5px 5px 5px grey;
+    border-radius: 10px;
+}
 
 .map {
-    height: 500px;
+    height: 600px;
+    width:800px;
     border: 1px solid green;
+    box-shadow: 5px 5px 5px grey;
+    border-radius: 10px;
 }
 
 #root {
+    padding: 20px;
     display:flex;
     flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items:center;
+    background: lightblue;
+}
+.button {
+    color:rgb(14, 13, 95);
+    background: chocolate;
+    width:100px;
+    height:50px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px grey;
+    font-size: large;
+    font-family:cursive;
+}
+.chart {
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px grey;
+    width: 500px;
+    height:500px;
 }
