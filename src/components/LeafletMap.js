@@ -140,16 +140,25 @@ function LeafletMap(divRef) {
         but.innerHTML="Store track"
         but.onclick= ()=>{
             if (myTrajet.path[0]){
+                let n=localStorage.length+1 //will serve as id of the trajet
+                n="track"+n
                 myTrajet.title=prompt("Enter a title for this track")
                 const storeData= {title:myTrajet.title, path:myTrajet.path}
-                alert(JSON.stringify(myTrajet.path))
-                localStorage.setItem(myTrajet.title,JSON.stringify(myTrajet.path))
+                
+                localStorage.setItem(n,JSON.stringify(storeData))
 
             }else {
                 alert('there is no trajet')
             }
         }
         rootDiv.appendChild(but)
+
+        //-------------test local storage storage
+            const x=JSON.parse(localStorage.getItem("track1"))
+            
+            myTrajet.path=x.path
+            myTrajet.display()
+        //--------------------------------------
 
 
         const handleClick = (e) => {

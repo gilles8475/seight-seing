@@ -22,8 +22,9 @@ class Ballade extends Array {
     }
 
     set path(path) {
-        this._path = path
-        this.track.setLatLngs(path)
+        //this._path = path
+        path.forEach(item=>this.addpoint(item))
+        //this.track.setLatLngs(path)
 
     }
     set title(title){
@@ -45,8 +46,8 @@ class Ballade extends Array {
             draggable: true,
         }).addTo(this.idmap)
         this.push(newMark)
-        this.path = this.map((value) => value.getLatLng())
-        //this.track.setLatLngs(this._path)
+        this._path = this.map((value) => value.getLatLng())
+        this.track.setLatLngs(this._path)
 
 
         newMark.on('drag', () => {
@@ -57,7 +58,8 @@ class Ballade extends Array {
     }
 
     refresh() {
-        this.path = this.map((value) => value.getLatLng())
+        this._path = this.map((value) => value.getLatLng())
+        this.track.setLatLngs(this._path)
 
     }
 
