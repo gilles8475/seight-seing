@@ -78,8 +78,8 @@ function LeafletMap(divRef) {
     })
 
     myPromise.then((el) => {
-        const rootDiv = document.getElementById('root')
-        rootDiv.appendChild(el)
+        const container = document.getElementById('mapContainer')
+        container.appendChild(el)
 
         const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
         //console.log('loading ign :', IgnTypes.IgnPhotos);
@@ -135,6 +135,9 @@ function LeafletMap(divRef) {
         //instanciate a ballade
         const myTrajet = new Ballade(map)
         //create a button
+        const menuContainer=document.createElement('div')
+        menuContainer.classList.add('menuContainer')
+        container.appendChild(menuContainer)
         const but=document.createElement('button')
         but.classList.add('button')
         but.innerHTML="Store track"
@@ -151,7 +154,7 @@ function LeafletMap(divRef) {
                 alert('there is no trajet')
             }
         }
-        rootDiv.appendChild(but)
+        menuContainer.appendChild(but)
 
         //-------------test local storage storage
             const x=JSON.parse(localStorage.getItem("track1"))
@@ -159,7 +162,24 @@ function LeafletMap(divRef) {
             myTrajet.path=x.path
             myTrajet.display()
         //--------------------------------------
-
+        //create a menu with an item for each stored track
+        const dropDown=document.createElement('div')
+        const txt=document.createTextNode('Select a track')
+        dropDown.appendChild(txt)
+        dropDown.classList.add('dropdown')
+        const dropDownContent=document.createElement('div')
+        dropDownContent.classList.add('dropdowncontent')
+        dropDown.appendChild(dropDownContent)
+        menuContainer.appendChild(dropDown)
+        let l=localStorage.length
+        for (let i=0;i<l;i++){
+            let name=localStorage.key(i)//return the key of the i-th element stored in the browser
+            let item=JSON.parse(localStorage.getItem(name))
+            let menuItem=document.createElement('div')
+            menuItem.innerHTML=item.title
+            console.log("creating :",item.title )
+            dropDownContent.appendChild(menuItem)
+        }
 
         const handleClick = (e) => {
 

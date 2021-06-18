@@ -7,30 +7,33 @@ import './style.css'
 import ExifDatas from '../exifdataFile.json'
 
 function component() {
-
+    const mapContainer=document.createElement('div')
+    mapContainer.id="mapContainer"
+    mapContainer.classList.add('mapContainer')
     const elem = document.createElement('div')
     elem.id = 'root'
-    //console.log(ExifDatas);
-    // const imgContainer = document.createElement('div')
+    elem.appendChild(mapContainer)
     
-    // imgContainer.style.width = '200px'
-    // imgContainer.style.height = '200px'
-    
-    
-    // elem.appendChild(imgContainer)
     const image = document.createElement('img')
     image.classList.add('pano')
     image.id='pano'
     image.src = ExifDatas[0].filename
-    /*image.width=400
-    image.height=400
-    image.style.objectFit='contain'*/
-
+    
     elem.appendChild(image)
 
-    // const m= testCreateMap("test")
-    // testCreateMap('test2', 'dark')
-    // testCreateMap('test3', 'sat')
+    const inputList=document.createElement('input')
+    inputList.setAttribute("list","tracks")
+    
+    elem.appendChild(inputList)
+
+    const listTracks=document.createElement('DATALIST')
+    listTracks.setAttribute("id","tracks")
+    const item1=document.createElement("option")
+    item1.setAttribute("value","option1")
+    listTracks.appendChild(item1)
+    elem.appendChild(listTracks)
+
+
     const map = LeafletMap('leaflet')
     //const myChart= PathProfil('myChart', '500px','500px')
     //elem.appendChild(map)

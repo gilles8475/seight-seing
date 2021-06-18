@@ -10,8 +10,9 @@
 }
 
 .map {
-    height: 600px;
-    width:800px;
+    
+    height: 600px ;
+    width:80%;
     border: 1px solid green;
     box-shadow: 5px 5px 5px grey;
     border-radius: 10px;
@@ -27,10 +28,11 @@
     background: lightblue;
 }
 .button {
+    
     color:rgb(14, 13, 95);
     background: chocolate;
-    width:100px;
-    height:50px;
+    width:100%;
+    height:10%;
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
     font-size: large;
@@ -41,4 +43,37 @@
     box-shadow: 5px 5px 5px grey;
     width: 500px;
     height:500px;
+}
+.mapContainer{
+    display:flex;
+    
+    flex-direction: row;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px grey;
+    width:50%;
+    height:50%
+}
+.menuContainer{
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.dropdown{
+    background-color: lightsalmon;
+    padding: 10px;
+}
+.dropdowncontent {
+    display: none;
+    
+    background-color:rgb(162, 161, 206);
+}
+
+.dropdown:hover .dropdowncontent {
+    display: block;
+}
+.dropdown:hover .dropdowncontent div {
+    padding:10px;
+}
+.dropdown:hover .dropdowncontent div:hover {
+    background-color: seagreen;
 }
