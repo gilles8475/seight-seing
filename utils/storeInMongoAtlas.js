@@ -57,13 +57,14 @@ async function storeInMongoAtlas(trackDocument) {
 
        } catch (err) {
 
-        console.log(err.stack);
+        console.log("there is an atlas error: ",err.stack);
 
     }
 
 
 
     finally {
+       console.log("closing connection")
 
        await client.close();
 

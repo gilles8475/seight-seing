@@ -25,7 +25,10 @@ app.post('/update', (request, res) => {
   //console.log(console.dir)
   //store the track in the mongo atlas server and in local mongo db
   
-  storeInMongoAtlas(request.body).then((data)=>{storeInMongo(request.body)})
+  storeInMongoAtlas(request.body).then((data)=>{
+    storeInMongo(request.body)
+    
+  })
   // fs.writeFile('tracks-record.json',JSON.stringify(request.body),function(err){
   //   if (err) throw err
   //   console.log('file updated')
