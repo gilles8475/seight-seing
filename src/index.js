@@ -6,6 +6,7 @@ import PathProfil from './components/PathProfil'
 import './style.css'
 import ExifDatas from '../exifdataFile.json'
 
+
 function component() {
     const mapContainer=document.createElement('div')
     mapContainer.id="mapContainer"
@@ -21,37 +22,35 @@ function component() {
     
     elem.appendChild(image)
 
-    const inputList=document.createElement('input')
-    inputList.setAttribute("list","tracks")
+    // const inputList=document.createElement('input')
+    // inputList.setAttribute("list","tracks")
     
-    elem.appendChild(inputList)
+    // elem.appendChild(inputList)
 
-    const listTracks=document.createElement('DATALIST')
-    listTracks.setAttribute("id","tracks")
-    const item1=document.createElement("option")
-    item1.setAttribute("value","option1")
-    listTracks.appendChild(item1)
-    elem.appendChild(listTracks)
+    // const listTracks=document.createElement('DATALIST')
+    // listTracks.setAttribute("id","tracks")
+    // const item1=document.createElement("option")
+    // item1.setAttribute("value","option1")
+    // listTracks.appendChild(item1)
+    // elem.appendChild(listTracks)
 
 
     const map = LeafletMap('leaflet')
-    //const myChart= PathProfil('myChart', '500px','500px')
-    //elem.appendChild(map)
-    //PathProfil('myChart').then(htmlElement => elem.appendChild(htmlElement) )
-    //elem.appendChild(myProfile)
-    // fetch('https://jsonplaceholder.typicode.com/posts/1')
-    // .then(res=>res.json())
-    // .then(data=>console.log(data))
-    // const mapContainer = document.createElement('div');
-    // mapContainer.id = 'mapbox'
-    // mapContainer.style.height = '500px'
+    //test fetch api----------------
+    const user = {
+        first_name: 'John',
+        last_name: 'Lilly',
+        job_title: 'Software Engineer'
+    }
+    const options = {
+        method: 'PUT',
+        body: JSON.stringify(user),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    
 
-    // elem.appendChild(mapContainer)
-    // //const element = document.createElement('div');
-    // window.onload = () => {
-
-    //     const myMapbox = Mapboxmap('mapbox')
-    // }
     return elem
 
 

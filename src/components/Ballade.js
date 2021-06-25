@@ -22,7 +22,11 @@ class Ballade extends Array {
     }
 
     set path(path) {
-        //this._path = path
+        //remove all marker
+        while(this[0]){
+            this[this.length-1].remove()//remove the marker
+            this.pop()
+        }
         path.forEach(item=>this.addpoint(item))
         //this.track.setLatLngs(path)
 

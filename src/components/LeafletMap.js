@@ -144,11 +144,26 @@ function LeafletMap(divRef) {
         but.onclick= ()=>{
             if (myTrajet.path[0]){
                 let n=localStorage.length+1 //will serve as id of the trajet
-                n="track"+n
+                n="trackId"+n
                 myTrajet.title=prompt("Enter a title for this track")
                 const storeData= {title:myTrajet.title, path:myTrajet.path}
+                const JsonData=JSON.stringify(storeData)
+                console.log("la donnée à stocker est: ",JsonData)
+                localStorage.setItem(n,JsonData)
+                //window.location.reload()
                 
-                localStorage.setItem(n,JSON.stringify(storeData))
+                fetch('http://localhost:3000/update',{
+                    method:'POST',
+
+                    body:JsonData,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        
+                    },
+                    
+                }).then(data=>data.json())
+                .then((json)=>{console.log(json)})
+                
 
             }else {
                 alert('there is no trajet')
@@ -156,12 +171,7 @@ function LeafletMap(divRef) {
         }
         menuContainer.appendChild(but)
 
-        //-------------test local storage storage
-            const x=JSON.parse(localStorage.getItem("track1"))
-            
-            myTrajet.path=x.path
-            myTrajet.display()
-        //--------------------------------------
+        
         //create a menu with an item for each stored track
         const dropDown=document.createElement('div')
         const txt=document.createTextNode('Select a track')
@@ -176,7 +186,12 @@ function LeafletMap(divRef) {
             let name=localStorage.key(i)//return the key of the i-th element stored in the browser
             let item=JSON.parse(localStorage.getItem(name))
             let menuItem=document.createElement('div')
+            menuItem.onclick= (event)=>{
+                myTrajet.path=item.path
+                myTrajet.display()
+            }
             menuItem.innerHTML=item.title
+            menuItem.id="trackId"+(i+1)
             console.log("creating :",item.title )
             dropDownContent.appendChild(menuItem)
         }
