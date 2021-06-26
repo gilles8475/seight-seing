@@ -1,10 +1,11 @@
 const {MongoClient} = require('mongodb')
+const {atlasMongoPass}=require('./atlasMongoPass')
 
 
 
  
 // Replace the following with your Atlas connection string                                                                                                                                        
-const url = "mongodb+srv://glou8475:poilaucul@cluster0.ccqkd.mongodb.net/panoramas?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true";
+const url = `mongodb+srv://${atlasMongoPass.id}:${atlasMongoPass.password}@cluster0.ccqkd.mongodb.net/panoramas?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true`;
 const client = new MongoClient(url,{ useUnifiedTopology: true });
 
 // The database to use

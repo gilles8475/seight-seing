@@ -5,3 +5,4 @@ dist
 .vscode
 .eslintrc.js
 secret.js
+utils/atlasMongoPass.js
