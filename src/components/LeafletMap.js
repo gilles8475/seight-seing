@@ -187,6 +187,8 @@ function LeafletMap(divRef) {
             let item=JSON.parse(localStorage.getItem(name))
             let menuItem=document.createElement('div')
             menuItem.onclick= (event)=>{
+                dropDownContent.style.display=""
+                
                 myTrajet.path=item.path
                 myTrajet.display()
             }

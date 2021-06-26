@@ -5,72 +5,27 @@ const {MongoClient} = require('mongodb')
  
 // Replace the following with your Atlas connection string                                                                                                                                        
 const url = "mongodb+srv://glou8475:poilaucul@cluster0.ccqkd.mongodb.net/panoramas?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true";
-const client = new MongoClient(url);
+const client = new MongoClient(url,{ useUnifiedTopology: true });
 
 // The database to use
 
 const dbName = "panoramas";
 
-                      
-
-async function storeInMongoAtlas(trackDocument) {
-
-   try {
-
-        await client.connect();
-
-        console.log("Connected correctly to server Atlas");
-
-        const db = client.db(dbName);
-
-        // Use the collection "people"
-
-        const col = db.collection("tracks");
-
-        // Construct a document                                                                                                                                                              
-
-        // let personDocument = {
-
-        //     "name": { "first": "Alan", "last": "Turing" },
-
-        //     "birth": new Date(1912, 5, 23), // June 23, 1912                                                                                                                                 
-
-        //     "death": new Date(1954, 5, 7),  // June 7, 1954                                                                                                                                  
-
-        //     "contribs": [ "Turing machine", "Turing test", "Turingery" ],
-
-        //     "views": 1250000
-
-        // }
-
-        // Insert a single document, wait for promise so we can read it back
-
-        const p = await col.insertOne(trackDocument);
-
-        // Find one document
-
-        const myDoc = await col.findOne();
-
-        // Print to the console
-
-        console.log(myDoc);
-
-       } catch (err) {
-
-        console.log("there is an atlas error: ",err.stack);
-
-    }
+const storeInMongoAtlas=(objParam)=>{
+   console.log('connecting Atlas database')
+   MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db(dbName);
+      
+      dbo.collection("tracks").insertOne(objParam, function(err, res) {
+        if (err) throw err;
+        console.log("1 document inserted in atlas mongo batabase");
+        db.close();
+      })
+    })
+}                    
 
 
-
-    finally {
-       console.log("closing connection")
-
-       await client.close();
-
-   }
-
-}
 
 module.exports= {storeInMongoAtlas}
 //run().catch(console.dir);
