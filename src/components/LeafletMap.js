@@ -6,7 +6,7 @@ import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
 import { mapboxToken } from '../../secret'
-
+import dropdown from './dropdownMenu'
 //icone that will be displayed for markers
 import iconPaysage from '../assets/icons8-alpes-80.png'
 
@@ -121,6 +121,14 @@ function LeafletMap(divRef) {
                 }
 
                 let M = L.marker([lat, lon], markerOption).addTo(layerPov)
+                //create popup for each marker showing the image
+                let markerPopupContent=`<img width=400 src=${img.filename}>`
+                let markerPopupOption={
+                    maxWidth:400,
+                    attribution: "photo perso"
+                    
+                }
+                M.bindPopup(markerPopupContent,markerPopupOption).openPopup()
                 //change the image in the 'pano' element to see the associated image
                 M.on('mouseover',
                     (event) => {
@@ -134,6 +142,8 @@ function LeafletMap(divRef) {
         }
         //instanciate a ballade
         const myTrajet = new Ballade(map)
+        //add a popup
+        myTrajet.track.bindPopup('<h1>hello gilles</h1>')
         //create a button
         const menuContainer=document.createElement('div')
         menuContainer.classList.add('menuContainer')
@@ -181,6 +191,8 @@ function LeafletMap(divRef) {
         dropDownContent.classList.add('dropdowncontent')
         dropDown.appendChild(dropDownContent)
         menuContainer.appendChild(dropDown)
+        //this is a test of modular dropdown menu
+        menuContainer.appendChild(dropdown(myTrajet))
         let l=localStorage.length
         for (let i=0;i<l;i++){
             let name=localStorage.key(i)//return the key of the i-th element stored in the browser

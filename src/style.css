@@ -22,7 +22,7 @@
 #root {
     
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
     /* justify-content: space-around; */
     flex-wrap:nowrap;
     align-items:flex-start;
@@ -34,7 +34,7 @@
     background: chocolate;
     
     /*height:50%;*/
-    margin:3px;
+    
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
     font-size: large;
@@ -49,11 +49,12 @@
 .mapContainer{
     display:flex;
     margin:10px;
-    flex-direction: column-reverse;
+    flex-direction: column;
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
-    width:50%;
-    height:50%
+    width:80%;
+    height:20%;
+    
 }
 .menuContainer{
     display: flex; 
@@ -70,9 +71,10 @@
 }
 
 .dropdown{
-    background-color: rgba(255, 160, 122, 0.76);
+    background-color: rgba(44, 211, 233, 0.76);
     /*width: 40%;*/
     padding: 10px;
+    margin:3px;
     border-radius: 10px;
     box-shadow: 5px 5px 5px rgb(128, 128, 128);
 }

@@ -60,6 +60,7 @@ const graphicObject = {
 }
 
 const PathProfil = (data, idref,trajetRef) => {
+    //trajet ref is the instance of Ballade from which the chart will be made
     let [aBs, oRd] = data
     const config = {
         type: 'line',
@@ -118,7 +119,7 @@ const PathProfil = (data, idref,trajetRef) => {
                             let slope = 100 * (y2 - y1) / (x2 - x1)
                             
                             // console.log('data index', context.dataIndex)
-                            let l=context.formattedValue //abscisse ie lenth on the path
+                            let l=context.formattedValue //abscisse ie length on the path
                             trajetRef.setOdoMarker(x1.valueOf())
                             
                             return ([slope.toFixed(1) + '%', "z: "+l])
@@ -132,7 +133,7 @@ const PathProfil = (data, idref,trajetRef) => {
 
 
     createChartElement(idref).then(([canvas, container]) => {
-        const rootDiv = document.getElementById('root')
+        const rootDiv = document.getElementById('mapContainer')
         container.id = idref
         //container.style.width = width
         //container.style.height = height
