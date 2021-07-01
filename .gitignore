@@ -6,3 +6,4 @@ dist
 .eslintrc.js
 secret.js
 utils/atlasMongoPass.js
+utils/storeInMongoAtlascopy.json
