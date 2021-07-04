@@ -8,7 +8,9 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "exif": "node utils/buildJsonExif.js ./dist/photos "
+    "exif": "node utils/buildJsonExif.js ./dist/photos ",
+    "api" : "node utils/api.js",
+    "tracks": "node utils/recordTracksInFile.js"
   },
   "keywords": [],
   "author": "gilles D <gilldupont@gmail.com>",

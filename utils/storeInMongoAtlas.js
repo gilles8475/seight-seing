@@ -17,8 +17,11 @@ const storeInMongoAtlas=(objParam)=>{
    MongoClient.connect(url, function(err, db) {
       if (err) throw err;
       var dbo = db.db(dbName);
+      const query={title:objParam.title}
+      const update={$set:{path:objParam.path}}
+      const option={upsert:true}
       
-      dbo.collection("tracks").insertOne(objParam, function(err, res) {
+      dbo.collection("tracks").updateOne(query,update,option, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted in atlas mongo batabase");
         db.close();

@@ -36,19 +36,6 @@ function component() {
 
 
     const map = LeafletMap('leaflet')
-    //test fetch api----------------
-    const user = {
-        first_name: 'John',
-        last_name: 'Lilly',
-        job_title: 'Software Engineer'
-    }
-    const options = {
-        method: 'PUT',
-        body: JSON.stringify(user),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
     
 
     return elem

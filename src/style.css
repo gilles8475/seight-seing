@@ -85,6 +85,10 @@
     background-color:rgba(162, 161, 206, 0.705);
 }
 
+.dropdowncontent:focus {
+    background-color:rgba(240, 17, 17, 0.705);
+}
+
 .dropdown:hover .dropdowncontent {
     display: block;
 }

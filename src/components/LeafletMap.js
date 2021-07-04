@@ -128,7 +128,7 @@ function LeafletMap(divRef) {
                     attribution: "photo perso"
                     
                 }
-                M.bindPopup(markerPopupContent,markerPopupOption).openPopup()
+                M.bindPopup(markerPopupContent,markerPopupOption)
                 //change the image in the 'pano' element to see the associated image
                 M.on('mouseover',
                     (event) => {
@@ -155,7 +155,9 @@ function LeafletMap(divRef) {
             if (myTrajet.path[0]){
                 let n=localStorage.length+1 //will serve as id of the trajet
                 n="trackId"+n
-                myTrajet.title=prompt("Enter a title for this track")
+                console.log(myTrajet.title);
+                myTrajet.title=prompt("Enter a title for this track",myTrajet.title)
+                
                 const storeData= {title:myTrajet.title, path:myTrajet.path}
                 const JsonData=JSON.stringify(storeData)
                 console.log("la donnée à stocker est: ",JsonData)
@@ -181,18 +183,19 @@ function LeafletMap(divRef) {
         }
         menuContainer.appendChild(but)
 
+        //this is a test of modular dropdown menu
+        menuContainer.appendChild(dropdown(myTrajet))
         
         //create a menu with an item for each stored track
         const dropDown=document.createElement('div')
-        const txt=document.createTextNode('Select a track')
+        const txt=document.createTextNode("Select a track \n (local storage)")
         dropDown.appendChild(txt)
         dropDown.classList.add('dropdown')
         const dropDownContent=document.createElement('div')
         dropDownContent.classList.add('dropdowncontent')
         dropDown.appendChild(dropDownContent)
         menuContainer.appendChild(dropDown)
-        //this is a test of modular dropdown menu
-        menuContainer.appendChild(dropdown(myTrajet))
+
         let l=localStorage.length
         for (let i=0;i<l;i++){
             let name=localStorage.key(i)//return the key of the i-th element stored in the browser
@@ -202,6 +205,7 @@ function LeafletMap(divRef) {
                 dropDownContent.style.display=""
                 
                 myTrajet.path=item.path
+                myTrajet.title=item.title
                 myTrajet.display()
             }
             menuItem.innerHTML=item.title

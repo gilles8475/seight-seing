@@ -20,7 +20,7 @@ class Ballade extends Array {
     get path() {
         return this._path
     }
-
+    
     set path(path) {
         //remove all marker
         while(this[0]){

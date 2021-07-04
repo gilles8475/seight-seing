@@ -4,7 +4,7 @@ import Ballade from './Ballade';
 const  DropdownMenu =(trajet)=>{
 
     const dropDown = document.createElement('div')
-    const txt = document.createTextNode('Select a track')
+    const txt = document.createTextNode('Select a track(mongo storage)')
     dropDown.appendChild(txt)
     dropDown.classList.add('dropdown')
     const dropDownContent = document.createElement('div')
@@ -21,6 +21,7 @@ const  DropdownMenu =(trajet)=>{
         menuItem.onclick=(ev)=>{
             console.log(path.path);
             trajet.path=path.path
+            trajet.title=path.title
             trajet.display()
         }
 
