@@ -1,7 +1,7 @@
-import tracks from '../../utils/tracks-records.json'
+
 import Ballade from './Ballade';
 //create a dropdown menu to access the recorded tracks
-//this dropdown menu is created from data coming from the tracks-records.json file
+//this dropdown menu is created from data coming from mongo atlas and use an api
 const  DropdownMenu =(trajet)=>{
 
     const dropDown = document.createElement('div')
@@ -12,7 +12,8 @@ const  DropdownMenu =(trajet)=>{
     dropDownContent.classList.add('dropdowncontent')
     dropDown.appendChild(dropDownContent)
    
-    
+    fetch('http://localhost:3000/tracks')
+
     for (let path of tracks){
         //for each records in tracks-record.json create an item menu
         let menuItem=document.createElement('div')

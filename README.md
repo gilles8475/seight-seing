@@ -10,3 +10,4 @@ Installation:
 3/put your picture ine that photos directory
 4/ type npm run exif on your console this will generate an exifdataFile.json file with gps coordinates for all the pictures found in the ./dist/photos directory
 5/ run npm start and see the result on your navigator at localhost:9000
+

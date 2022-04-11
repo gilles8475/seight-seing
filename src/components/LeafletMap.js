@@ -9,6 +9,7 @@ import { mapboxToken } from '../../secret'
 import dropdown from './dropdownMenu'
 //icone that will be displayed for markers
 import iconPaysage from '../assets/icons8-alpes-80.png'
+import iconPosition from '../assets/arrow4.png'
 
 
 const IGNTOKEN = 'choisirgeoportail'
@@ -18,8 +19,10 @@ let myDivIcon = L.divIcon()
 const panoIcon = L.icon({
     iconUrl: iconPaysage,
     iconSize: [20, 20],
-
-
+})
+const currentPositionIcon=L.icon({
+    iconUrl: iconPosition,
+    iconSize: [20,20]
 })
 
 
@@ -94,7 +97,10 @@ function LeafletMap(divRef) {
         })
         const home = map.locate()
         //triggered when a location is found
-        map.on('locationfound', (e) => map.panTo(e.latlng))
+        map.on('locationfound', (e) => {
+            map.flyTo(e.latlng)
+            L.marker(e.latlng,{icon:currentPositionIcon,title:"You are here"}).addTo(map);
+        })
 
         
         const baseMaps = {
@@ -103,7 +109,7 @@ function LeafletMap(divRef) {
             "Mapbox": layerMapbox
         }
 
-        const pov = { "pointof view": layerPov }
+        const pov = { "point of view": layerPov }
         L.control.layers(baseMaps, pov).addTo(map)
         /*layer group for the markers*/
 
@@ -175,7 +181,7 @@ function LeafletMap(divRef) {
                     
                 }).then(data=>data.json())
                 .then((json)=>{console.log(json)})
-                
+               
 
             }else {
                 alert('there is no trajet')
@@ -190,7 +196,7 @@ function LeafletMap(divRef) {
         const dropDown=document.createElement('div')
         const txt=document.createTextNode("Select a track \n (local storage)")
         dropDown.appendChild(txt)
-        dropDown.classList.add('dropdown')
+        dropDown.classList.add('dropdown') //   applique le style css dropdown
         const dropDownContent=document.createElement('div')
         dropDownContent.classList.add('dropdowncontent')
         dropDown.appendChild(dropDownContent)
