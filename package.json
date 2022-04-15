@@ -7,9 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "webpack serve --open",
+
+    "prod": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.prod.js",
     "exif": "node utils/buildJsonExif.js ./photos ",
     "api" : "node utils/api.js",
+    "debug": "webpack --config webpack.debug.js",
     "tracks": "node utils/recordTracksInFile.js"
   },
   "keywords": [],

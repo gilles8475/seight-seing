@@ -7,7 +7,7 @@ const readline = require('readline').createInterface({
   readline.question('entre your mapbox acces token: ', token => {
       const content='export const mapboxToken="'+token+'"'
       try {
-        const data = fs.writeFileSync('./test.js', content)
+        const data = fs.writeFileSync('./secret.js', content)
         //file written successfully
       } catch (err) {
         console.error(err)

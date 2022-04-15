@@ -1,7 +1,7 @@
 const express = require('express')
 const fs=require('fs')
-//const {storeInMongo}=require('./storeMongo.js')
-//const {storeInMongoAtlas}=require('./storeInMongoAtlas.js')
+const {storeInMongo}=require('./storeMongo.js')
+const {storeInMongoAtlas}=require('./storeInMongoAtlas.js')
 const app = express()
 
 
@@ -18,14 +18,19 @@ app.use((req,res,next)=>{
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    console.log("recieved a get request:")
-    console.log(req)
+  console.log(req)
   
 })
 app.post('/update', (request, res) => {
-    console.log("requestrecieved");
+  //console.log(console.dir)
+  //store the track in the mongo atlas server and in local mongo db
+  
+  storeInMongoAtlas(request.body)
+  storeInMongo(request.body)
     
-   //res.send(request.body)
+  
+
+  res.send(request.body)
 
 })
 app.delete('/', (req, res) => { res.send('recieved a delete request') })

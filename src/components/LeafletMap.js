@@ -1,11 +1,9 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-//import mapboxgl from 'mapbox-gl';
 import Ballade from './Ballade';
 import PathProfil from './PathProfil';
 import { IgnLayer, mapboxLayer, IgnTypes } from './tileLayers.js'
 import ExifDatas from '../../exifdataFile.json'
-import { mapboxToken } from '../../secret'
 import dropdown from './dropdownMenu'
 //icone that will be displayed for markers
 import iconPaysage from '../assets/icons8-alpes-80.png'
@@ -58,15 +56,10 @@ function getElevation(lat, lng) {
 
 
 function LeafletMap(divRef) {
-    //console.log(mapstyle)
-    //const style = 'mapbox://styles/mapbox/outdoors-v11'
-    //const style= stylesMap[mapstyle]
-    //const style = stylesMap.outdoors
-
-
-
+    //this function is called in index.js to show a leaflet container
 
     let myPromise = new Promise((res, rej) => {
+        //create the main container for the map
 
         const elem = document.createElement('div')
         elem.id = divRef
@@ -148,12 +141,14 @@ function LeafletMap(divRef) {
         }
         //instanciate a ballade
         const myTrajet = new Ballade(map)
+        
         //add a popup
         myTrajet.track.bindPopup('<h1>hello gilles</h1>')
         //create a button
-        const menuContainer=document.createElement('div')
+        const menuContainer=document.createElement('div')//the container that contains the buttons
         menuContainer.classList.add('menuContainer')
         container.appendChild(menuContainer)
+        
         const but=document.createElement('button')
         but.classList.add('button')
         but.innerHTML="Store track"

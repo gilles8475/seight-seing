@@ -1,11 +1,11 @@
 import tracks from '../../utils/tracks-records.json'
-import Ballade from './Ballade';
+
 //create a dropdown menu to access the recorded tracks
 //this dropdown menu is created from data coming from the tracks-records.json file
 const  DropdownMenu =(trajet)=>{
 
     const dropDown = document.createElement('div')
-    const txt = document.createTextNode('Select a track(mongo storage)')
+    const txt = document.createTextNode('Select a track')
     dropDown.appendChild(txt)
     dropDown.classList.add('dropdown')
     const dropDownContent = document.createElement('div')
