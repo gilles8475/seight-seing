@@ -1,9 +1,12 @@
 import tracks from '../../utils/tracks-records.json'
+import Ballade from './Ballade'
+import calculProfile from './js/calculProfile'
 
 //create a dropdown menu to access the recorded tracks
 //this dropdown menu is created from data coming from the tracks-records.json file
-const  DropdownMenu =(trajet)=>{
+const  DropdownMenu =(map)=>{
 
+    const trace=new Ballade(map) //instantiate a void Ballade
     const dropDown = document.createElement('div')
     const txt = document.createTextNode('Select a track')
     dropDown.appendChild(txt)
@@ -21,9 +24,11 @@ const  DropdownMenu =(trajet)=>{
 
         menuItem.onclick=(ev)=>{
             console.log(path.path);
-            trajet.path=path.path
-            trajet.title=path.title
-            trajet.display()
+            trace.path=path.path
+            trace.title=path.title
+            trace.display()
+            calculProfile(trace)
+            map.flyTo(trace.path[0])//center map on first point of 
         }
 
         dropDownContent.appendChild(menuItem)

@@ -133,12 +133,12 @@ const PathProfil = (data, idref,trajetRef) => {
 
 
     createChartElement(idref).then(([canvas, container]) => {
-        const rootDiv = document.getElementById('mapContainer')
+        const parentCanvasContainer= document.getElementById('display')
         container.id = idref
         //container.style.width = width
         //container.style.height = height
         let myChart = new Chart(canvas, config)
-        rootDiv.appendChild(container)
+        parentCanvasContainer.appendChild(container)
         return container
     }
     )

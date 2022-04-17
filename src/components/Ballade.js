@@ -12,6 +12,9 @@ class Ballade extends Array {
         this.track = L.polyline(this._path, { color: 'red' })//la trace sur la carte
         this.odoMarker=L.marker()
         this._title=""
+        //this.track.on('click',(e)=>{this.track.setStyle({color:'blue'})}
+        this.track.on('click',(e)=>{console.log(this.track.getPane())})
+        
     }
 
     display() {

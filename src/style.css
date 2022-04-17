@@ -1,9 +1,17 @@
-.hello {
-    color: red;
+/*some variables for the css file
+variables in :root are global*/
+:root {
+    --blue: red
+}
+.display {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 .pano {
-    height:50%;
-    width:25%;
+    
+    width:100%;
     margin:10px;
     object-fit: contain;
     box-shadow: 5px 5px 5px rgb(20, 41, 68);
@@ -13,70 +21,69 @@
 .map {
     
     height: 600px;
-    width:100%;
+    width:500px;
     border: 1px solid green;
     box-shadow: 5px 5px 5px grey;
     border-radius: 10px;
 }
 
-#root {
+.root {
     
     display:flex;
-    flex-direction: column;
-    /* justify-content: space-around; */
-    flex-wrap:nowrap;
-    align-items:flex-start;
+    flex-direction:row;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    
     background: lightblue;
 }
-.button {
-    
-    color:rgb(14, 13, 95);
-    background: chocolate;
-    
-    /*height:50%;*/
-    
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px grey;
-    font-size: large;
-    font-family:cursive;
-}
+
 .chart {
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
     width: 500px;
     height:500px;
 }
-.mapContainer{
+/* .mapContainer{
     display:flex;
     margin:10px;
     flex-direction: column;
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
-    width:80%;
-    height:20%;
+    width:50%;
+    height:100%;
     
+} */
+.menuContainer {
+    display:flex;
+    flex-direction: column;
 }
-.menuContainer{
-    display: flex; 
-    text-align: center;
-    height:50px;
-    background-color: tomato;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px grey;
-    flex-direction:row-reverse;
-    /* justify-content:flex-end; */
-    overflow:visible;
-    z-index: 1000;
-    
+.control{
+    display:flex;
+    flex-direction: column;
+    width:10%
 }
 
-.dropdown{
-    background-color: rgba(44, 211, 233, 0.76);
-    /*width: 40%;*/
+.button {
+    
+    background-color: rgba(26, 113, 78, 0.76);
+    width: 100%;
     padding: 10px;
     margin:3px;
     border-radius: 10px;
     box-shadow: 5px 5px 5px rgb(128, 128, 128);
+    font-size: large;
+    
+} 
+
+
+.dropdown {
+    background-color: rgba(44, 211, 233, 0.76);
+    width: 100%;
+    padding: 10px;
+    margin:3px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgb(128, 128, 128);
+    font-size: large;
 }
 .dropdowncontent {
     display: none;
