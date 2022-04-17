@@ -9,7 +9,7 @@ import ExifDatas from '../../exifdataFile.json'
 import iconPaysage from '../assets/icons8-alpes-80.png'
 import iconPosition from '../assets/arrow4.png'
 import HandleClickOnMap from './js/HandleClickOnMap';
-import ProfileButton  from './js/profileButton'
+
 
 //mapboxgl.accessToken = mapboxToken
 //const myPolyline = []
@@ -143,10 +143,10 @@ function LeafletMap(divRef) {
         }
     }
     //instanciate a ballade
-    const myTrajet = new Ballade(map)
+    const activeTrajet = new Ballade(map)
 
     //add a popup
-    myTrajet.track.bindPopup('<h1>hello gilles</h1>')
+    activeTrajet.track.bindPopup('<h1>hello gilles</h1>')
 
     //create a button
     // const menuContainer = document.createElement('div')//the container that contains the buttons
@@ -157,13 +157,13 @@ function LeafletMap(divRef) {
     // but.classList.add('button')
     // but.innerHTML = "Store track"
     // but.onclick = () => {
-    //     if (myTrajet.path[0]) {
+    //     if (activeTrajet.path[0]) {
     //         let n = localStorage.length + 1 //will serve as id of the trajet
     //         n = "trackId" + n
-    //         console.log(myTrajet.title);
-    //         myTrajet.title = prompt("Enter a title for this track", myTrajet.title)
+    //         console.log(activeTrajet.title);
+    //         activeTrajet.title = prompt("Enter a title for this track", activeTrajet.title)
 
-    //         const storeData = { title: myTrajet.title, path: myTrajet.path }
+    //         const storeData = { title: activeTrajet.title, path: activeTrajet.path }
     //         const JsonData = JSON.stringify(storeData)
     //         console.log("la donnée à stocker est: ", JsonData)
     //         localStorage.setItem(n, JsonData)
@@ -189,7 +189,7 @@ function LeafletMap(divRef) {
     //menuContainer.appendChild(but)
 
     //this is a test of modular dropdown menu
-    //menuContainer.appendChild(dropdown(myTrajet))
+    //menuContainer.appendChild(dropdown(activeTrajet))
 
     //create a menu with an item for each stored track
     // const dropDown = document.createElement('div')
@@ -209,9 +209,9 @@ function LeafletMap(divRef) {
     //     menuItem.onclick = (event) => {
     //         dropDownContent.style.display = ""
 
-    //         myTrajet.path = item.path
-    //         myTrajet.title = item.title
-    //         myTrajet.display()
+    //         activeTrajet.path = item.path
+    //         activeTrajet.title = item.title
+    //         activeTrajet.display()
     //     }
     //     menuItem.innerHTML = item.title
     //     menuItem.id = "trackId" + (i + 1)
@@ -229,9 +229,9 @@ function LeafletMap(divRef) {
     //     //console.log(e.originalEvent.button);
 
     //     if (isCTRLKeyPressed) {
-    //         myTrajet.display()
+    //         activeTrajet.display()
 
-    //         myTrajet.addpoint(e.latlng)
+    //         activeTrajet.addpoint(e.latlng)
 
 
 
@@ -239,19 +239,19 @@ function LeafletMap(divRef) {
 
     //     }
     //     else if (isRightButtonPressed) {
-    //         console.log("longueur du trajet: ", myTrajet.getLength())
-    //         let myProfile = myTrajet.getVerticalProfil()
+    //         console.log("longueur du trajet: ", activeTrajet.getLength())
+    //         let myProfile = activeTrajet.getVerticalProfil()
     //         myProfile.then(data => {
     //             /*création d'une vue qui affiche le profil alti du trajet
     //              à l'aide de charte js*/
-    //             PathProfil(data, "myChart", myTrajet)
+    //             PathProfil(data, "myChart", activeTrajet)
 
     //             /*test de la methode getPointFromOdo de la classe ballade
     //             //on met un marker au milieu du trajet
-    //             let middlePoint= myTrajet.getPointFromOdo(0*myTrajet.getLength()/1)
+    //             let middlePoint= activeTrajet.getPointFromOdo(0*activeTrajet.getLength()/1)
     //             const middleMarker= L.marker(middlePoint).addTo(map)*/
     //         })
-    //         //myTrajet.getElevations()
+    //         //activeTrajet.getElevations()
     //     }
 
     //     else {
@@ -265,8 +265,8 @@ function LeafletMap(divRef) {
     //     }
 
     // }
-    HandleClickOnMap(map,myTrajet)
-    ProfileButton(myTrajet)
+    HandleClickOnMap(map,activeTrajet)
+    //ProfileButton(activeTrajet)
 
    // map.on('mousedown', handleClick)
 
@@ -274,7 +274,7 @@ function LeafletMap(divRef) {
 
     // map.on('dblclick', (e) => {
     //     //insert un point sur le trajet
-    //     myTrajet.insertpoint(e.layerPoint)
+    //     activeTrajet.insertpoint(e.layerPoint)
 
 
 
@@ -283,8 +283,9 @@ function LeafletMap(divRef) {
 
 
 
-    
-   return map
+    //il est à noter que le trajet actif est celui qui sera concerné par tous les appelles d'api
+    //que ce soit pour l'enregistrement ou l'affichage du profil
+   return {map,activeTrajet}
 
 }
 export default LeafletMap

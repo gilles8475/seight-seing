@@ -1,8 +1,8 @@
-const but = (trajet) => {
-    document.createElement('button')
-    but.classList.add('button')
-    but.innerHTML = "Store track"
-    but.onclick = () => {
+const recordButton = (trajet) => {
+    const bouton=document.createElement('button')
+    
+    bouton.innerHTML = "Store track"
+    bouton.onclick = () => {
         if (trajet.path[0]) {
             let n = localStorage.length + 1 //will serve as id of the trajet
             n = "trackId" + n
@@ -32,5 +32,6 @@ const but = (trajet) => {
             alert('there is no trajet')
         }
     }
-    return but
+    return bouton
 }
+export default recordButton

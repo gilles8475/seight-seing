@@ -27,7 +27,11 @@ module.exports = {
             keep:/photos\//
         },
     },
-    plugins: [new HtmlWebpackPlugin()],
+    plugins: [new HtmlWebpackPlugin(
+        {
+            template: "./src/template.html",
+        }
+    )],
 
     module: {
 

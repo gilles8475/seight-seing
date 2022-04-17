@@ -9,11 +9,16 @@ class Ballade extends Array {
         this.icon = L.divIcon()
         this._path = initialPath //un tableau des coordonnées des points de la trace
         this._path.forEach(item=>this.addpoint(item))
-        this.track = L.polyline(this._path, { color: 'red' })//la trace sur la carte
+        this.track = L.polyline(this._path, { color: 'blue' })//la trace sur la carte
         this.odoMarker=L.marker()
         this._title=""
-        //this.track.on('click',(e)=>{this.track.setStyle({color:'blue'})}
-        this.track.on('click',(e)=>{console.log(this.track.getPane())})
+        this.track.on('mouseover',(e)=>{
+            this.track.setStyle({color:'red'})
+        })
+        this.track.on('mouseout',(e)=>{
+            this.track.setStyle({color:'blue'})
+        })
+        //this.track.on('click',(e)=>{console.log(this.track.getPane())})
         
     }
 
