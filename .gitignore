@@ -10,3 +10,4 @@ utils/storeInMongoAtlascopy.json
 photos
 images
 inutiles
+dist/*
