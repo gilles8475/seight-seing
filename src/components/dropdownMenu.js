@@ -5,9 +5,9 @@ import calculProfile from './js/calculProfile'
 
 //create a dropdown menu to access the recorded tracks
 //this dropdown menu is created from data coming from the tracks-records.json file
-const  DropdownMenu =(map)=>{
+const  DropdownMenu =(map,trajet)=>{
 
-    const trace=new Ballade(map) //instantiate a void Ballade
+    //const trace=new Ballade(map) //instantiate a void Ballade
     //creation d'un menu déroulant bootstrap 5
     const divMenu=document.createElement('div')
     divMenu.classList.add('btn-group')
@@ -40,11 +40,11 @@ const  DropdownMenu =(map)=>{
         _li.appendChild(menuItem)
         menuItem.onclick=(ev)=>{
             console.log(path.path);
-            trace.path=path.path
-            trace.title=path.title
-            trace.display()
-            calculProfile(trace)
-            map.flyTo(trace.path[0])//center map on first point of 
+            trajet.path=path.path
+            trajet.title=path.title
+            trajet.display()
+            calculProfile(trajet)
+            map.flyTo(trajet.path[0])//center map on first point of 
         }
 
         dropDownContent.appendChild(_li)

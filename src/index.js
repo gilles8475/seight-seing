@@ -38,7 +38,7 @@ function component() {
         const profBut = profileButton(activeTrajet)
         profBut.classList.add('btn', 'btn-danger')
         BUTTONGROUP.appendChild(profBut)
-        BUTTONGROUP.appendChild(DropdownMenu(map))
+        BUTTONGROUP.appendChild(DropdownMenu(map,activeTrajet))
         //il faut passer map en parametre au menu pour que les selection du menu s'affiche sur map
     })
 
