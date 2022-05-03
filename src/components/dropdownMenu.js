@@ -13,7 +13,7 @@ const  DropdownMenu =(map,trajet)=>{
     divMenu.classList.add('btn-group')
     
     const dropDown = document.createElement('button')
-    dropDown.classList.add('btn','btn-primary','dropdown-toggle')
+    dropDown.classList.add('btn','btn-primary','dropdown-toggle','row')
     
     dropDown.setAttribute('type','button')
     dropDown.setAttribute('data-bs-toggle','dropdown')
@@ -42,9 +42,12 @@ const  DropdownMenu =(map,trajet)=>{
             console.log(path.path);
             trajet.path=path.path
             trajet.title=path.title
+            trajet.id = path.id //this property is not part of the class and his only used for update purpose
+            console.log(trajet.id);
             trajet.display()
             calculProfile(trajet)
-            map.flyTo(trajet.path[0])//center map on first point of 
+            const bound = trajet.track.getBounds()//rectangular limits of the trajet
+            map.flyToBounds(bound)//center map on the track
         }
 
         dropDownContent.appendChild(_li)

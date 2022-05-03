@@ -10,7 +10,7 @@
     "prod": "webpack --config webpack.prod.js",
     "start": "webpack serve --open --config webpack.config.js",
     "exif": "node utils/buildJsonExif.js ./photos ",
-    "api": "node utils/api.js",
+    "api": "nodemon utils/api.js",
     "debug": "webpack --config webpack.debug.js",
     "tracks": "node utils/recordTracksInFile.js"
   },
@@ -28,6 +28,7 @@
     "eslint-plugin-react": "^7.23.2",
     "exif": "^0.6.0",
     "html-webpack-plugin": "^5.3.1",
+    "json-loader": "^0.5.7",
     "node-sass": "^7.0.1",
     "popper.js": "^1.16.1",
     "postcss-loader": "^6.2.1",

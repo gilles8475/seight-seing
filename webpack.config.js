@@ -43,7 +43,11 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
 
             },
-            // ...
+            {
+                test : /\.geojson$/,
+                loader: 'json-loader'
+            },
+
             {
                 test: /\.(scss)$/,
                 use: [{
@@ -76,11 +80,12 @@ module.exports = {
   
             {
 
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
 
                 type: 'asset/resource',
 
             },
+
             // {
             //     test: /\.m?js$/,
             //     exclude: /(node_modules|bower_components)/,

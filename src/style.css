@@ -106,3 +106,6 @@ variables in :root are global*/
 .dropdown:hover .dropdowncontent div:hover {
     background-color: seagreen;
 }
+.leaflet-container.crosshair-cursor-enabled {
+    cursor:crosshair;
+}

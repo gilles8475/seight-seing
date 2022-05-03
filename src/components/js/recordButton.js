@@ -15,7 +15,7 @@ const recordButton = (trajet) => {
             localStorage.setItem(n, JsonData)
             //window.location.reload()
 
-            fetch('http://localhost:3000/update', {
+            fetch('http://localhost:3000/', {
                 method: 'POST',
 
                 body: JsonData,
@@ -29,8 +29,9 @@ const recordButton = (trajet) => {
 
 
         } else {
-            alert('there is no trajet')
+            alert('there is no track')
         }
+        trajet.path=[]
     }
     return bouton
 }

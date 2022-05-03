@@ -8,8 +8,12 @@ class Ballade extends Array {
         this.idmap = idmap
         this.icon = L.divIcon()
         this._path = initialPath //un tableau des coordonnées des points de la trace
-        this._path.forEach(item=>this.addpoint(item))
+        this._path.forEach(item => this.addpoint(item))
         this.track = L.polyline(this._path, { color: 'blue' })//la trace sur la carte
+        this.track.on("click", (e) => {
+            console.log(e);
+            this.insertpoint(e.layerPoint)
+        })
         this.odoMarker=L.marker()
         this._title=""
         this.track.on('mouseover',(e)=>{
@@ -76,6 +80,7 @@ class Ballade extends Array {
     }
 
     insertpoint(layerpoint) {
+        console.log("allooooooooooooooooooo", layerpoint);
         const p = this.track.closestLayerPoint(layerpoint)
         let pos = this.idmap.layerPointToLatLng(p)// donne les coordonnées geo du point
         let newMark = L.marker((pos), { icon: this.icon, draggable: true }).addTo(this.idmap) //crée un marker sur le trajet
