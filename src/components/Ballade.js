@@ -220,7 +220,21 @@ class Ballade extends Array {
         return coordinates
     }
     troncatePath(value) {
+        const pathLength = this.path.length
+        const troncatedPath = []
+        const nPart = Math.floor(this.path.length / 200) //number of pieces of 200 values of the track. 200 seems to be approximatly the max number of points acceptable for the ign vertical profile api
         //cut the path to a given value. Usefull for example if it not possible to get the vertical profile due to a to much number of points
+        if (nPart > 0) {
+
+            for (let i = 0; i < nPart; i++) {
+                let offset = (i == 0) ? 0 : 1 //offset for slicing array
+                troncatedPath.push(this.path.slice(200 * i + offset, 200 * (i + 1)))
+            }
+            troncatedPath.push(this.path.slice(nPart * 200 + 1))//the rest of the array
+            return troncatedPath
+        } else {
+            return([this.path])
+        }
         try {
             this.path = this.path.slice(0, value)
 

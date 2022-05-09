@@ -143,7 +143,7 @@ function LeafletMap(divRef) {
         activeTrajet.display()
         const bound = activeTrajet.track.getBounds()//rectangular limits of the trajet
         map.flyToBounds(bound)//center map on the track
-        activeTrajet.troncatePath(200)
+        console.log("troncated is :",activeTrajet.troncatePath())
 
         
     })
