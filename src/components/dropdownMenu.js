@@ -6,6 +6,7 @@ import calculProfile from './js/calculProfile'
 //create a dropdown menu to access the recorded tracks
 //this dropdown menu is created from data coming from the tracks-records.json file
 const  DropdownMenu =(map,trajet)=>{
+    
 
     //const trace=new Ballade(map) //instantiate a void Ballade
     //creation d'un menu déroulant bootstrap 5

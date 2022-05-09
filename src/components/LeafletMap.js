@@ -11,10 +11,13 @@ import iconPaysage from '../assets/icons8-alpes-80.png'
 import iconPosition from '../assets/arrow4.png'
 import HandleClickOnMap from './js/HandleClickOnMap'
 import Tour_du_ventoux from '../assets/map.geojson'
+import calculProfile from './js/calculProfile'
+import getElevation from './js/getElevation'
 
+//test -------------------
+getElevation(45,2).then(res => console.log("the result is:  ", res))
+//end test ------------
 
-//mapboxgl.accessToken = mapboxToken
-//const myPolyline = []
 let myDivIcon = L.divIcon()
 const panoIcon = L.icon({
     iconUrl: iconPaysage,
@@ -42,21 +45,21 @@ function LeafletMap(divRef) {
 
 
 
-    
+
     const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
     //console.log('loading ign :', IgnTypes.IgnPhotos);
     const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
     const layerMapbox = mapboxLayer
     const layerMapBoxOutdoor = mapboxOutdoor
     const layerPov = L.layerGroup([])
-    const layerMarket=L.layerGroup([])
-    const layerGeoJson=L.layerGroup([])
+    const layerMarket = L.layerGroup([])
+    const layerGeoJson = L.layerGroup([])
 
     const map = L.map(divRef, {
         center: [42, 5],
         zoom: 10,
         //layers: [layerIgnPlan, layerIgnPhotos, layerMapbox,layerMapBoxOutdoor, layerPov]
-        layers: [layerMapbox, layerPov,layerMarket]
+        layers: [layerMapbox, layerPov, layerMarket]
         //layers: layerIgnPhotos
     })
     map.locate()
@@ -66,7 +69,7 @@ function LeafletMap(divRef) {
         L.marker(e.latlng, { icon: currentPositionIcon, title: "You are here" }).addTo(map);
     })
 
-    
+
     const baseMaps = {
         "Photos IGN": layerIgnPhotos,
         "Plan IGN": layerIgnPlan,
@@ -74,19 +77,20 @@ function LeafletMap(divRef) {
         "Mapbox outdoor": layerMapBoxOutdoor,
     }
 
-    const pov = { 
+    const pov = {
         "point of view": layerPov,
         "marketplace": layerMarket,
-        "Circuits" : layerGeoJson
-     }
+        "Circuits": layerGeoJson
+    }
     L.control.layers(baseMaps, pov).addTo(map)
     /*layer group for the markers*/
 
-     //add a geojson layer it is a test
-     const myLayer = L.geoJSON().addTo(layerGeoJson)
-     myLayer.addData(Tour_du_ventoux)
-     //L.geoJSON(Tour_du_ventoux).addTo(Map)
-
+    //add a geojson layer it is a test
+    const myLayer = L.geoJSON().addTo(layerGeoJson)
+    myLayer.addData(Tour_du_ventoux)
+    //L.geoJSON(Tour_du_ventoux).addTo(Map)
+    const TdvCoordinates = Tour_du_ventoux.features[0].geometry.coordinates
+    //console.log(TdvCoordinates);
     /*add a marker for each photos in the photos folder, photos datas are stored in ExifDatas*/
     for (let img of ExifDatas) {
         let [lat, lon] = [img.latitude, img.longitude]
@@ -121,12 +125,37 @@ function LeafletMap(divRef) {
     //instanciate a ballade
     const activeTrajet = new Ballade(map)
 
+    //set coordinnates of activeTtajet with geoJson object
+    layerGeoJson.on('add', (event) => { 
+        console.log('clicked')
+        const toLatLngCoords = []
+        TdvCoordinates.forEach(element => {
+            //swap elements of the array to get [lat,lng] instead of [lng,lat]
+             let a = element[0]
+             element[0] = element[1]
+             element[1] = a
+             
+            toLatLngCoords.push(L.latLng(element))
+
+        })
+        console.log("path length: ", toLatLngCoords.length)
+        activeTrajet.path = toLatLngCoords;
+        activeTrajet.display()
+        const bound = activeTrajet.track.getBounds()//rectangular limits of the trajet
+        map.flyToBounds(bound)//center map on the track
+        activeTrajet.troncatePath(200)
+
+        
+    })
+
     //add a popup
     activeTrajet.track.bindPopup('<h1>popup</h1>')
-
+    //activeTrajet.path = TdvCoordinates
+    
+    
     //create a button
 
-    HandleClickOnMap(map, activeTrajet,layerMarket)
+    HandleClickOnMap(map, activeTrajet, layerMarket)
 
     return { map, activeTrajet }
 

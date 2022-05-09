@@ -2,8 +2,8 @@ import PathProfil from "./PathProfil"
 
 /*calcul et affiche le profil altimétrique d'un itinéraire
 */
-const calculProfile = (trajet)=>{
-    let myProfile = trajet.getVerticalProfil()
+const calculProfile = (trajet,sampling)=>{
+    let myProfile = trajet.getVerticalProfil(sampling)
     myProfile.then(data => {
         /*création d'une vue qui affiche le profil alti du trajet
          à l'aide de charte js*/
