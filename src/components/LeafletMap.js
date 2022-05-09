@@ -15,7 +15,6 @@ import calculProfile from './js/calculProfile'
 import getElevation from './js/getElevation'
 
 //test -------------------
-getElevation(45,2).then(res => console.log("the result is:  ", res))
 //end test ------------
 
 let myDivIcon = L.divIcon()
@@ -47,7 +46,6 @@ function LeafletMap(divRef) {
 
 
     const layerIgnPhotos = IgnLayer(IgnTypes.IgnPhotos)
-    //console.log('loading ign :', IgnTypes.IgnPhotos);
     const layerIgnPlan = IgnLayer(IgnTypes.IgnPlan)
     const layerMapbox = mapboxLayer
     const layerMapBoxOutdoor = mapboxOutdoor
@@ -88,9 +86,8 @@ function LeafletMap(divRef) {
     //add a geojson layer it is a test
     const myLayer = L.geoJSON().addTo(layerGeoJson)
     myLayer.addData(Tour_du_ventoux)
+    //myLayer.setStyle({color:"green"})
     //L.geoJSON(Tour_du_ventoux).addTo(Map)
-    const TdvCoordinates = Tour_du_ventoux.features[0].geometry.coordinates
-    //console.log(TdvCoordinates);
     /*add a marker for each photos in the photos folder, photos datas are stored in ExifDatas*/
     for (let img of ExifDatas) {
         let [lat, lon] = [img.latitude, img.longitude]
@@ -126,15 +123,22 @@ function LeafletMap(divRef) {
     const activeTrajet = new Ballade(map)
 
     //set coordinnates of activeTtajet with geoJson object
-    layerGeoJson.on('add', (event) => { 
+    layerGeoJson.on('add', (event) => {
         console.log('clicked')
+        const TdvCoordinates = Tour_du_ventoux.features[0].geometry.coordinates.map((value) => {
+            return [value[1], value[0]]//swap the coordinates ie lon lat to lat lon
+
+        }
+        )
+        //const TdvCoordinates = Temp.slice(0)
+        console.log('tdv: ', TdvCoordinates);
         const toLatLngCoords = []
         TdvCoordinates.forEach(element => {
-            //swap elements of the array to get [lat,lng] instead of [lng,lat]
-             let a = element[0]
-             element[0] = element[1]
-             element[1] = a
-             
+            // //swap elements of the array to get [lat,lng] instead of [lng,lat]
+            // let a = element[0]
+            // element[0] = element[1]
+            // element[1] = a
+
             toLatLngCoords.push(L.latLng(element))
 
         })
@@ -143,16 +147,19 @@ function LeafletMap(divRef) {
         activeTrajet.display()
         const bound = activeTrajet.track.getBounds()//rectangular limits of the trajet
         map.flyToBounds(bound)//center map on the track
-        console.log("troncated is :",activeTrajet.troncatePath())
 
-        
+
+    })
+
+    layerGeoJson.on('remove', (event)=>{
+        activeTrajet.path=[]
+        activeTrajet.display()
     })
 
     //add a popup
     activeTrajet.track.bindPopup('<h1>popup</h1>')
-    //activeTrajet.path = TdvCoordinates
-    
-    
+
+
     //create a button
 
     HandleClickOnMap(map, activeTrajet, layerMarket)

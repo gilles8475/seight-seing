@@ -40,7 +40,6 @@ const  DropdownMenu =(map,trajet)=>{
         menuItem.id=path._id
         _li.appendChild(menuItem)
         menuItem.onclick=(ev)=>{
-            console.log(path.path);
             trajet.path=path.path
             trajet.title=path.title
             trajet.id = path.id //this property is not part of the class and his only used for update purpose

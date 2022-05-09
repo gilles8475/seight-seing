@@ -1,3 +1,5 @@
+import { afterRead } from '@popperjs/core'
+import { TimeScale } from 'chart.js'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
@@ -34,6 +36,8 @@ class Ballade extends Array {
     }
 
     set path(path) {
+        this.track.setLatLngs([])
+        this._path = []
         //remove all marker
         while (this[0]) {
             this[this.length - 1].remove()//remove the marker
@@ -127,6 +131,24 @@ class Ballade extends Array {
 
     }
 
+    getTruncatedLength() {
+        const truncatePath = this.truncatePath()
+        const truncateLength = []
+
+        truncatePath.forEach((value, index, array) => {
+            let length = 0
+            //iterate on each piece of path
+            value.forEach((item, index, array) => {
+                length += (index != 0) ? this.idmap.distance(item, array[index - 1]) : 0
+            })
+            truncateLength.push(length)
+
+
+        })
+        return truncateLength //array cooresponding at the lengths of the parts of path
+
+    }
+
     getLength() {
         let length = 0
         this._path.forEach((value, index) => {
@@ -176,50 +198,87 @@ class Ballade extends Array {
         //between each points on the track is equal to the "sampling"
         //const samplingValue=200 //adjust here if you want different sampling 100 means 1 point each 100m
 
-        let lon = []
-        let lat = []
-        let sampling = Math.ceil(this.getLength() / samplingValue)
+        const truncatePath = this.truncatePath()
+        //console.log("truncated path is", truncatePath);
+        const truncateLength = this.getTruncatedLength()
+        let index = 0 //for index incrementation below
+        let concatResult = []
+        for (let path of truncatePath) {
 
-        for (let point of this._path) {
-            //on fait un tableau de lat et un tableau de long
-            //create an array of lat
-            lat.push(point.lat)
-            lon.push(point.lng)
-        }
+            let lon = []
+            let lat = []
+            let sampling = Math.ceil(truncateLength[index] / samplingValue)
+            //console.log("truncated length index", index, " : ", truncateLength[index]);
+            console.log("sampling: ", sampling)
+            for (let point of path) {
+                //on fait un tableau de lat et un tableau de long
+                //create an array of lat
+                lat.push(point.lat)
+                lon.push(point.lng)
+            }
 
-        let reqLon = lon.join('|')
+            let reqLon = lon.join('|')
+            //console.log(reqLon);
 
-        let reqLat = lat.join('|')
-        let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevationLine.json?sampling=${sampling}&lon=${reqLon}&lat=${reqLat}&indent=true)`
+            let reqLat = lat.join('|')
+            // console.log(reqLat);
+            console.log("lat & lon lengths", lat.length, ":", lon.length);
+            let reqAltiIgn = `https://wxs.ign.fr/choisirgeoportail/alti/rest/elevationLine.json?sampling=${sampling}&lon=${reqLon}&lat=${reqLat}&indent=true)`
+            const coordinates = await fetch(reqAltiIgn)
+                .then(rep => rep.json())
+                .then(data => {
+                    //console.log(data);
+                    let elevationPoints = data.elevations
+                    elevationPoints.forEach((value) => {
+                        concatResult.push({ point: [value.lat, value.lon], z: value.z })
+                        //abscisses represents the distance on the track relative to his origin ie the last point is the length of the track
 
+                        // let abscisses = elevationPoints.map((value, index, array) => {
 
-        const coordinates = await fetch(reqAltiIgn)
-            .then(rep => rep.json())
-            .then(data => {
-                let elevationPoints = data.elevations
-                console.log("élévation points: ", elevationPoints);
-                //abscisses represent the distance on the track relative to his origin ie the last point is the length of the track
-                let abscisses = elevationPoints.map((value, index) => {
+                        //     const result = index != 0 ? Math.ceil(this.idmap.distance(
+                        //         [value.lat, value.lon], [array[index - 1].lat, array[index - 1].lon]
+                        //     )) : 0 //give an array representing distance between points
+                        //     return result
+                    })
 
-                    const result = index != 0 ? Math.ceil(this.idmap.distance(
-                        [value.lat, value.lon], [elevationPoints[index - 1].lat, elevationPoints[index - 1].lon]
-                    )) : 0
-                    return result
+                    // console.log("truncate length :", truncateLength);
+
+                    // abscisses[0] = (index != 0) ? truncateLength[index - 1] + this.idmap.distance([elevationPoints.lat, elevationPoints.lon], [last.lat,last.lon]) : 0
+                    // last = elevationPoints[elevationPoints.length - 1]//the last point of the sample
+                    // for (let i = 1; i < abscisses.length; i++) {
+                    //     abscisses[i] += abscisses[i - 1]
+                    // }
+
+                    // let ordonnees = data.elevations.map((value) => Math.ceil(value.z))
+                    return concatResult
                 })
-                for (let i = 1; i < abscisses.length; i++) {
-                    abscisses[i] += abscisses[i - 1]
-                }
 
-                let ordonnees = data.elevations.map((value) => Math.ceil(value.z))
-                //console.log("abscisses: ",abscisses)
-                //console.log("ordonnées: ",ordonnees)
-                return ([abscisses, ordonnees])
-            })
-        console.log("profil altimétrique", coordinates);
+            index += 1
 
-        return coordinates
+        }
+        const SEGMENT = concatResult.map((value, idx, array) => {
+            let dist = (idx == 0) ? 0 : this.idmap.distance(value.point, array[idx - 1].point)
+
+            return dist
+            //array of distances between points
+        })
+        let cumulD = 0
+        const ABSCISSES =SEGMENT.map((value,idx,array)=>{
+            cumulD += (idx==0)? 0:value
+            return cumulD
+        })
+
+        const ORDONNEES = concatResult.map((value)=>{
+            return value.z
+        })
+        return ([ABSCISSES, ORDONNEES])
+
+
     }
-    troncatePath(value) {
+
+
+
+    truncatePath() {
         const pathLength = this.path.length
         const troncatedPath = []
         const nPart = Math.floor(this.path.length / 200) //number of pieces of 200 values of the track. 200 seems to be approximatly the max number of points acceptable for the ign vertical profile api
@@ -233,14 +292,9 @@ class Ballade extends Array {
             troncatedPath.push(this.path.slice(nPart * 200 + 1))//the rest of the array
             return troncatedPath
         } else {
-            return([this.path])
+            return ([this.path])
         }
-        try {
-            this.path = this.path.slice(0, value)
 
-        } catch (error) {
-            throw error
-        }
     }
 }
 

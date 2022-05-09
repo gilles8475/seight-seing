@@ -1,5 +1,5 @@
 import calculProfile from "./calculProfile"
-const sampling = 1000 // put here the sampling value for vertical profile. Example : 200 means one point each 200m
+import sampling from './sampling'
 const ProfileButton = (trajet) => {
     const but = document.createElement('button')
     //but.classList.add('btn-danger')
